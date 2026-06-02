@@ -1,0 +1,937 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AI Small Business Guru — Light Branding Sandbox</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f7f5ef;
+    --paper: #ffffff;
+    --paper-warm: #fffaf0;
+    --ink: #18202a;
+    --ink-strong: #0b1220;
+    --muted: #536273;
+    --muted-2: #6b7785;
+    --line: #d8dee6;
+    --line-strong: #b9c3cf;
+    --shadow: 0 20px 55px rgba(24, 32, 42, .12);
+    --shadow-soft: 0 8px 24px rgba(24, 32, 42, .08);
+    --radius: 24px;
+    --max: 1240px;
+    --focus: #155eef;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    color: var(--ink);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at 10% 0%, rgba(255, 196, 87, .22), transparent 35rem),
+      radial-gradient(circle at 88% 4%, rgba(56, 189, 248, .18), transparent 35rem),
+      linear-gradient(180deg, #fffdf7 0%, var(--page) 48%, #eef3f6 100%);
+    line-height: 1.5;
+  }
+
+  button, input, textarea { font: inherit; }
+
+  .wrap {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 36px 22px 70px;
+  }
+
+  header {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 24px;
+    align-items: end;
+    margin-bottom: 24px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    padding: 7px 11px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,.8);
+    color: #344054;
+    font-size: 13px;
+    font-weight: 750;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .eyebrow::before {
+    content: "";
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 0 4px rgba(16,185,129,.16);
+  }
+
+  h1 {
+    margin: 18px 0 14px;
+    color: var(--ink-strong);
+    font-size: clamp(38px, 5.8vw, 76px);
+    line-height: .92;
+    letter-spacing: -.068em;
+    max-width: 860px;
+  }
+
+  .lead {
+    margin: 0;
+    color: var(--muted);
+    font-size: clamp(17px, 2vw, 21px);
+    max-width: 780px;
+  }
+
+  .note-card {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 18px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .note-card strong {
+    color: var(--ink-strong);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .note-card p {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(120px, 1fr));
+    gap: 10px;
+    margin: 22px 0 16px;
+    padding: 8px;
+    background: rgba(255,255,255,.72);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .tab {
+    border: 1px solid transparent;
+    background: transparent;
+    color: #435064;
+    border-radius: 16px;
+    padding: 13px 12px;
+    cursor: pointer;
+    font-weight: 820;
+    text-align: left;
+    transition: background .15s ease, color .15s ease, border-color .15s ease, transform .15s ease;
+  }
+
+  .tab:hover {
+    transform: translateY(-1px);
+    background: #f3f6fa;
+    color: var(--ink-strong);
+  }
+
+  .tab:focus-visible {
+    outline: 3px solid rgba(21,94,239,.28);
+    outline-offset: 2px;
+  }
+
+  .tab.active {
+    background: var(--tab-bg);
+    color: var(--tab-text);
+    border-color: var(--tab-border);
+    box-shadow: 0 8px 18px rgba(24,32,42,.08);
+  }
+
+  .concept {
+    display: none;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 30px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .concept.active { display: block; }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.05fr .95fr;
+    min-height: 480px;
+  }
+
+  .brand-panel {
+    background:
+      linear-gradient(135deg, rgba(var(--rgb-primary), .13), transparent 40%),
+      linear-gradient(180deg, var(--panel-bg), var(--panel-bg-2));
+    padding: clamp(28px, 4vw, 52px);
+    border-right: 1px solid var(--line);
+  }
+
+  .brand-lockup {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    margin-bottom: 34px;
+  }
+
+  .brand-mark {
+    width: 92px;
+    height: 92px;
+    flex: 0 0 92px;
+    border-radius: 26px;
+    background: #ffffff;
+    border: 1px solid var(--line);
+    box-shadow: 0 12px 26px rgba(24,32,42,.10);
+  }
+
+  .brand-name {
+    margin: 0;
+    color: var(--brand-ink);
+    font-family: var(--display);
+    font-weight: var(--display-weight);
+    letter-spacing: var(--tracking);
+    font-size: clamp(34px, 4.5vw, 64px);
+    line-height: .92;
+  }
+
+  .brand-name span { display: block; }
+
+  .tagline {
+    margin: 0 0 24px;
+    color: var(--brand-copy);
+    max-width: 620px;
+    font-size: 21px;
+  }
+
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 26px;
+  }
+
+  .pill {
+    border: 1px solid var(--pill-line);
+    background: var(--pill-bg);
+    color: var(--pill-text);
+    border-radius: 999px;
+    padding: 9px 13px;
+    font-size: 13px;
+    font-weight: 820;
+  }
+
+  .usage-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    max-width: 620px;
+  }
+
+  .usage {
+    background: rgba(255,255,255,.78);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 14px;
+    color: var(--muted);
+    box-shadow: 0 8px 18px rgba(24,32,42,.06);
+  }
+
+  .usage strong {
+    display: block;
+    color: var(--ink-strong);
+    margin-bottom: 4px;
+  }
+
+  .preview-panel {
+    padding: clamp(28px, 4vw, 50px);
+    background:
+      linear-gradient(135deg, #ffffff 0%, #f5f8fb 100%);
+    display: grid;
+    align-content: center;
+  }
+
+  .mock-site {
+    background: #ffffff;
+    border: 1px solid var(--line-strong);
+    border-radius: 26px;
+    box-shadow: 0 24px 54px rgba(24,32,42,.13);
+    overflow: hidden;
+  }
+
+  .mock-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--line);
+    background: #fbfcfe;
+  }
+
+  .mini-lockup {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-weight: 920;
+    color: var(--ink-strong);
+    letter-spacing: -.035em;
+  }
+
+  .mini-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+    background: var(--primary);
+    border: 1px solid rgba(0,0,0,.08);
+  }
+
+  .cta {
+    border: 1px solid rgba(0,0,0,.08);
+    border-radius: 999px;
+    background: var(--primary);
+    color: var(--button-text);
+    padding: 10px 15px;
+    font-weight: 900;
+    box-shadow: 0 7px 15px rgba(var(--rgb-primary), .18);
+  }
+
+  .mock-body {
+    padding: 26px;
+  }
+
+  .mock-body h3 {
+    margin: 0 0 12px;
+    color: var(--ink-strong);
+    font-family: var(--display);
+    font-size: 39px;
+    letter-spacing: var(--tracking);
+    line-height: .98;
+  }
+
+  .mock-body p {
+    margin: 0 0 22px;
+    color: var(--muted);
+    font-size: 16px;
+  }
+
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .service {
+    min-height: 104px;
+    border-radius: 18px;
+    background: var(--service-bg);
+    border: 1px solid var(--service-line);
+    padding: 16px;
+  }
+
+  .service strong {
+    display: block;
+    color: var(--ink-strong);
+    margin-bottom: 6px;
+  }
+
+  .service small {
+    display: block;
+    color: var(--muted);
+  }
+
+  .details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--line);
+  }
+
+  .detail {
+    padding: 28px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: #ffffff;
+  }
+
+  .detail:nth-child(2n) { border-right: 0; }
+
+  .detail h4 {
+    margin: 0 0 10px;
+    color: var(--section-title);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: .09em;
+  }
+
+  .detail p {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .detail ul {
+    margin: 10px 0 0;
+    padding-left: 20px;
+    color: var(--muted);
+  }
+
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .swatch {
+    min-height: 90px;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    padding: 10px;
+    display: flex;
+    align-items: flex-end;
+    color: var(--swatch-text, white);
+    font-size: 12px;
+    font-weight: 900;
+    text-shadow: var(--swatch-shadow, 0 1px 8px rgba(0,0,0,.35));
+  }
+
+  .light-swatch {
+    --swatch-text: #101828;
+    --swatch-shadow: none;
+  }
+
+  .svg-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 18px;
+  }
+
+  .svg-tile {
+    min-height: 160px;
+    display: grid;
+    place-items: center;
+    border-radius: 20px;
+    background:
+      linear-gradient(180deg, #ffffff, #f6f8fb);
+    border: 1px solid var(--line);
+  }
+
+  .svg-tile svg {
+    max-width: 116px;
+    max-height: 116px;
+  }
+
+  .contrast-check {
+    display: grid;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .contrast-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    border-radius: 14px;
+    padding: 11px 12px;
+    border: 1px solid var(--line);
+    background: #f8fafc;
+    color: #344054;
+    font-size: 13px;
+  }
+
+  .contrast-row strong {
+    color: var(--ink-strong);
+  }
+
+  .footer {
+    margin-top: 22px;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    background: rgba(255,255,255,.78);
+    padding: 20px;
+    color: var(--muted);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .footer strong { color: var(--ink-strong); }
+
+  code {
+    background: #eef2f6;
+    border: 1px solid #d6dde6;
+    color: #1f2937;
+    border-radius: 7px;
+    padding: 2px 6px;
+  }
+
+  /* Concept themes */
+  .c1 {
+    --display: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+    --display-weight: 850;
+    --tracking: -.045em;
+    --primary: #d97706;
+    --rgb-primary: 217, 119, 6;
+    --button-text: #ffffff;
+    --tab-bg: #fff3d7;
+    --tab-text: #7c3e00;
+    --tab-border: #f3c57b;
+    --panel-bg: #fffaf0;
+    --panel-bg-2: #f7efd8;
+    --brand-ink: #1f2933;
+    --brand-copy: #475467;
+    --pill-bg: #ffffff;
+    --pill-line: #e5c17c;
+    --pill-text: #713f12;
+    --service-bg: #fff7e6;
+    --service-line: #f0cf96;
+    --section-title: #9a4f00;
+  }
+
+  .c2 {
+    --display: ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+    --display-weight: 980;
+    --tracking: -.075em;
+    --primary: #155eef;
+    --rgb-primary: 21, 94, 239;
+    --button-text: #ffffff;
+    --tab-bg: #eaf1ff;
+    --tab-text: #123d9c;
+    --tab-border: #b8ccff;
+    --panel-bg: #f7faff;
+    --panel-bg-2: #eef5ff;
+    --brand-ink: #0b1220;
+    --brand-copy: #475467;
+    --pill-bg: #ffffff;
+    --pill-line: #b8ccff;
+    --pill-text: #123d9c;
+    --service-bg: #eff5ff;
+    --service-line: #c8d8ff;
+    --section-title: #155eef;
+  }
+
+  .c3 {
+    --display: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --display-weight: 900;
+    --tracking: -.075em;
+    --primary: #047857;
+    --rgb-primary: 4, 120, 87;
+    --button-text: #ffffff;
+    --tab-bg: #e8f8f0;
+    --tab-text: #065f46;
+    --tab-border: #a9e7c7;
+    --panel-bg: #f2fbf7;
+    --panel-bg-2: #e6f7ef;
+    --brand-ink: #10231d;
+    --brand-copy: #455c54;
+    --pill-bg: #ffffff;
+    --pill-line: #9bd9bb;
+    --pill-text: #065f46;
+    --service-bg: #ecfdf5;
+    --service-line: #a7f3d0;
+    --section-title: #047857;
+  }
+
+  .c4 {
+    --display: "Arial Black", Impact, ui-sans-serif, system-ui, sans-serif;
+    --display-weight: 950;
+    --tracking: -.035em;
+    --primary: #c2410c;
+    --rgb-primary: 194, 65, 12;
+    --button-text: #ffffff;
+    --tab-bg: #fff0e8;
+    --tab-text: #8a2c0a;
+    --tab-border: #fec7aa;
+    --panel-bg: #fff8ef;
+    --panel-bg-2: #f8ead6;
+    --brand-ink: #291a10;
+    --brand-copy: #5f5146;
+    --pill-bg: #ffffff;
+    --pill-line: #f6b68f;
+    --pill-text: #8a2c0a;
+    --service-bg: #fff2e8;
+    --service-line: #fed0b5;
+    --section-title: #c2410c;
+  }
+
+  .c5 {
+    --display: ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+    --display-weight: 1000;
+    --tracking: -.08em;
+    --primary: #5b7c00;
+    --rgb-primary: 91, 124, 0;
+    --button-text: #ffffff;
+    --tab-bg: #f2ffd2;
+    --tab-text: #3f5800;
+    --tab-border: #c7e86b;
+    --panel-bg: #fbffef;
+    --panel-bg-2: #eff9d4;
+    --brand-ink: #1d260d;
+    --brand-copy: #55603e;
+    --pill-bg: #ffffff;
+    --pill-line: #c2df74;
+    --pill-text: #3f5800;
+    --service-bg: #f7ffdf;
+    --service-line: #cde981;
+    --section-title: #5b7c00;
+  }
+
+  @media (max-width: 940px) {
+    header, .hero-grid, .details { grid-template-columns: 1fr; }
+    .brand-panel { border-right: 0; border-bottom: 1px solid var(--line); }
+    .tabs { grid-template-columns: 1fr; }
+    .service-grid, .usage-strip, .swatches, .svg-row { grid-template-columns: 1fr; }
+    .detail, .detail:nth-child(2n) { border-right: 0; }
+  }
+</style>
+</head>
+
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">AI Small Business Guru · light-first brand system</div>
+      <h1>Credible, useful, human — without the midnight hacker cave.</h1>
+      <p class="lead">Five light-theme identity directions with explicit contrast-safe surfaces, readable copy, reusable inline SVG marks, and realistic small-business application previews.</p>
+    </div>
+    <aside class="note-card">
+      <strong>Design constraint applied</strong>
+      <p>No dark wrapper masquerading as “premium.” Cards, details, tabs, mockups, and swatches are built around light surfaces with dark text and intentional border contrast.</p>
+    </aside>
+  </header>
+
+  <nav class="tabs" aria-label="Brand concept tabs">
+    <button class="tab active" data-target="c1">1. Human Guru</button>
+    <button class="tab" data-target="c2">2. Clean Operator</button>
+    <button class="tab" data-target="c3">3. Data Mechanic</button>
+    <button class="tab" data-target="c4">4. Toolbox Local</button>
+    <button class="tab" data-target="c5">5. Workflow Goblin</button>
+  </nav>
+
+  <section id="c1" class="concept c1 active">
+    <div class="hero-grid">
+      <div class="brand-panel">
+        <div class="brand-lockup">
+          <svg class="brand-mark" viewBox="0 0 128 128" role="img" aria-label="Human Guru logo">
+            <rect width="128" height="128" rx="30" fill="#ffffff"/>
+            <circle cx="64" cy="48" r="21" fill="#f59e0b"/>
+            <path d="M35 101c6-23 20-35 29-35s23 12 29 35" fill="#15803d"/>
+            <path d="M38 39c9-17 29-24 48-11" fill="none" stroke="#1f2933" stroke-width="8" stroke-linecap="round"/>
+            <path d="M80 31l15-15 4 20" fill="none" stroke="#1f2933" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M45 55h38" stroke="#1f2933" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+          <h2 class="brand-name"><span>AI Small</span><span>Business Guru</span></h2>
+        </div>
+        <p class="tagline">A seasoned human advisor using AI as leverage, not as a costume.</p>
+        <div class="pill-row">
+          <span class="pill">Personal trust</span>
+          <span class="pill">Warm authority</span>
+          <span class="pill">Best default</span>
+          <span class="pill">Good for cold outreach</span>
+        </div>
+        <div class="usage-strip">
+          <div class="usage"><strong>Use for</strong> Main site, direct outreach, proposals.</div>
+          <div class="usage"><strong>Avoid</strong> Too much guru mysticism or AI incense.</div>
+          <div class="usage"><strong>Line</strong> “Useful tech fixes without the agency circus.”</div>
+        </div>
+      </div>
+      <div class="preview-panel">
+        <div class="mock-site">
+          <div class="mock-topbar">
+            <div class="mini-lockup"><span class="mini-mark"></span> Hank @ AISBG</div>
+            <button class="cta">Book a fix</button>
+          </div>
+          <div class="mock-body">
+            <h3>One annoying business problem, fixed fast.</h3>
+            <p>Web pages, spreadsheets, automations, and small tools — scoped clearly and handed off cleanly.</p>
+            <div class="service-grid">
+              <div class="service"><strong>Website Rescue</strong><small>Forms, CTAs, mobile fixes.</small></div>
+              <div class="service"><strong>Data Cleanup</strong><small>CSV, sheets, dashboards.</small></div>
+              <div class="service"><strong>Workflow Fixes</strong><small>Scripts and tiny tools.</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="details">
+      <div class="detail">
+        <h4>Brand Strategy</h4>
+        <p>Lead with Hank’s experience and use AI Small Business Guru as the container. This is the most honest and immediately credible path.</p>
+        <ul>
+          <li>Voice: practical, calm, lightly funny.</li>
+          <li>Promise: clear scope, fast turnaround, useful handoff.</li>
+          <li>Buyer feeling: “This person will not disappear into consultant fog.”</li>
+        </ul>
+      </div>
+      <div class="detail">
+        <h4>Palette</h4>
+        <div class="swatches">
+          <div class="swatch" style="background:#1f2933">Ink<br>#1F2933</div>
+          <div class="swatch light-swatch" style="background:#fffaf0">Warm White<br>#FFFAF0</div>
+          <div class="swatch" style="background:#d97706">Trust Gold<br>#D97706</div>
+          <div class="swatch" style="background:#15803d">Practical Green<br>#15803D</div>
+          <div class="swatch light-swatch" style="background:#f7efd8">Parchment<br>#F7EFD8</div>
+        </div>
+      </div>
+      <div class="detail">
+        <h4>Typography</h4>
+        <p><strong>Display:</strong> Georgia/Cambria serif stack. <strong>Body:</strong> system sans. Mature without looking dusty.</p>
+        <div class="contrast-check">
+          <div class="contrast-row"><span>Main body text</span><strong>#536273 on white</strong></div>
+          <div class="contrast-row"><span>Headlines</span><strong>#0B1220 / #1F2933</strong></div>
+        </div>
+      </div>
+      <div class="detail">
+        <h4>SVG Strategy</h4>
+        <p>Rounded avatar mark for social, horizontal lockup for site header, simplified one-color icon for invoices and proposals.</p>
+        <div class="svg-row">
+          <div class="svg-tile"><svg viewBox="0 0 128 128"><rect width="128" height="128" rx="30" fill="#ffffff"/><circle cx="64" cy="48" r="21" fill="#f59e0b"/><path d="M35 101c6-23 20-35 29-35s23 12 29 35" fill="#15803d"/><path d="M38 39c9-17 29-24 48-11" fill="none" stroke="#1f2933" stroke-width="8" stroke-linecap="round"/><path d="M80 31l15-15 4 20" fill="none" stroke="#1f2933" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M45 55h38" stroke="#1f2933" stroke-width="6" stroke-linecap="round"/></svg></div>
+          <div class="svg-tile"><svg viewBox="0 0 128 128"><circle cx="64" cy="64" r="52" fill="#fffaf0" stroke="#d97706" stroke-width="10"/><path d="M40 78c11 12 37 12 48 0" fill="none" stroke="#15803d" stroke-width="10" stroke-linecap="round"/><path d="M43 54h42" stroke="#1f2933" stroke-width="9" stroke-linecap="round"/></svg></div>
+          <div class="svg-tile"><svg viewBox="0 0 128 128"><path d="M27 99h74L64 22z" fill="#d97706"/><path d="M46 77h36" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/><path d="M64 22v77" stroke="#15803d" stroke-width="7" stroke-linecap="round"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="c2" class="concept c2">
+    <div class="hero-grid">
+      <div class="brand-panel">
+        <div class="brand-lockup">
+          <svg class="brand-mark" viewBox="0 0 128 128" role="img" aria-label="Clean Operator logo">
+            <rect width="128" height="128" rx="30" fill="#ffffff"/>
+            <path d="M32 78l23 18 43-61" fill="none" stroke="#155eef" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="90" cy="35" r="12" fill="#0ea5e9"/>
+            <path d="M31 35h31M31 52h22" stroke="#0b1220" stroke-width="8" stroke-linecap="round"/>
+          </svg>
+          <h2 class="brand-name"><span>Small Biz</span><span>FixOps</span></h2>
+        </div>
+        <p class="tagline">A clean, productized service identity built around scope, speed, and visible before/after results.</p>
+        <div class="pill-row">
+          <span class="pill">Modern</span>
+          <span class="pill">Productized</span>
+          <span class="pill">Easy pricing</span>
+          <span class="pill">Landing-page friendly</span>
+        </div>
+        <div class="usage-strip">
+          <div class="usage"><strong>Use for</strong> Packages, pricing tables, marketplace gigs.</div>
+          <div class="usage"><strong>Avoid</strong> Looking too generic/SaaS-bro.</div>
+          <div class="usage"><strong>Line</strong> “One broken thing. One clear fix.”</div>
+        </div>
+      </div>
+      <div class="preview-panel">
+        <div class="mock-site">
+          <div class="mock-topbar">
+            <div class="mini-lockup"><span class="mini-mark"></span> FixOps</div>
+            <button class="cta">Start a rescue</button>
+          </div>
+          <div class="mock-body">
+            <h3>Clean fixes for messy business tech.</h3>
+            <p>Pick a package, send the problem, get a working before/after with notes.</p>
+            <div class="service-grid">
+              <div class="service"><strong>$250</strong><small>Quick Fix</small></div>
+              <div class="service"><strong>$500</strong><small>Deep Fix</small></div>
+              <div class="service"><strong>$1k</strong><small>Rescue Sprint</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="details">
+      <div class="detail"><h4>Brand Strategy</h4><p>Best if you want the service to feel like a menu instead of a custom consulting conversation. Strong for $250–$1,000 sprint offers.</p><ul><li>Voice: short, structured, confident.</li><li>Promise: fixed scope, fast result, clean proof.</li><li>Buyer feeling: “This is easy to buy.”</li></ul></div>
+      <div class="detail"><h4>Palette</h4><div class="swatches"><div class="swatch" style="background:#0b1220">Ink<br>#0B1220</div><div class="swatch light-swatch" style="background:#f7faff">Cloud<br>#F7FAFF</div><div class="swatch" style="background:#155eef">Operator Blue<br>#155EEF</div><div class="swatch" style="background:#0ea5e9">Sky<br>#0EA5E9</div><div class="swatch light-swatch" style="background:#eef5ff">Soft Blue<br>#EEF5FF</div></div></div>
+      <div class="detail"><h4>Typography</h4><p><strong>Display:</strong> heavy system sans. <strong>Body:</strong> system sans. Clean and familiar; nothing fights the offer.</p><div class="contrast-check"><div class="contrast-row"><span>Body copy</span><strong>#475467 on white</strong></div><div class="contrast-row"><span>Buttons</span><strong>White on #155EEF</strong></div></div></div>
+      <div class="detail"><h4>SVG Strategy</h4><p>Checklist, dashboard tile, spark. Keep the mark geometric so it works at tiny favicon size.</p><div class="svg-row"><div class="svg-tile"><svg viewBox="0 0 128 128"><rect width="128" height="128" rx="30" fill="#ffffff"/><path d="M32 78l23 18 43-61" fill="none" stroke="#155eef" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/><circle cx="90" cy="35" r="12" fill="#0ea5e9"/><path d="M31 35h31M31 52h22" stroke="#0b1220" stroke-width="8" stroke-linecap="round"/></svg></div><div class="svg-tile"><svg viewBox="0 0 128 128"><rect x="24" y="26" width="80" height="76" rx="18" fill="#155eef"/><path d="M42 65l14 13 31-36" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="95" cy="31" r="12" fill="#0ea5e9"/></svg></div><div class="svg-tile"><svg viewBox="0 0 128 128"><path d="M64 18l9 31 31-9-22 24 22 24-31-9-9 31-9-31-31 9 22-24-22-24 31 9z" fill="#155eef"/><circle cx="64" cy="64" r="15" fill="#0ea5e9"/></svg></div></div></div>
+    </div>
+  </section>
+
+  <section id="c3" class="concept c3">
+    <div class="hero-grid">
+      <div class="brand-panel">
+        <div class="brand-lockup">
+          <svg class="brand-mark" viewBox="0 0 128 128" role="img" aria-label="Data Mechanic logo">
+            <rect width="128" height="128" rx="30" fill="#ffffff"/>
+            <path d="M30 38h68M30 64h68M30 90h68" stroke="#047857" stroke-width="10" stroke-linecap="round"/>
+            <circle cx="48" cy="38" r="9" fill="#0b1220"/>
+            <circle cx="82" cy="64" r="9" fill="#0b1220"/>
+            <circle cx="61" cy="90" r="9" fill="#0b1220"/>
+            <path d="M91 24l13 13-18 18-13-13z" fill="#10b981"/>
+          </svg>
+          <h2 class="brand-name"><span>DATA</span><span>MECHANIC</span></h2>
+        </div>
+        <p class="tagline">For spreadsheet chaos, recurring reports, exports, scripts, and tiny internal tools.</p>
+        <div class="pill-row">
+          <span class="pill">Technical</span>
+          <span class="pill">Diagnostic</span>
+          <span class="pill">Workflow-heavy</span>
+          <span class="pill">Developer credibility</span>
+        </div>
+        <div class="usage-strip">
+          <div class="usage"><strong>Use for</strong> Data, automation, internal tools.</div>
+          <div class="usage"><strong>Avoid</strong> Terminal cosplay or too much jargon.</div>
+          <div class="usage"><strong>Line</strong> “Messy inputs. Useful outputs.”</div>
+        </div>
+      </div>
+      <div class="preview-panel">
+        <div class="mock-site">
+          <div class="mock-topbar">
+            <div class="mini-lockup"><span class="mini-mark"></span> Data Mechanic</div>
+            <button class="cta">Diagnose</button>
+          </div>
+          <div class="mock-body">
+            <h3>Fix the workflow before it eats your week.</h3>
+            <p>Dashboards, scripts, cleaned exports, and tiny tools for repetitive business pain.</p>
+            <div class="service-grid">
+              <div class="service"><strong>Parse</strong><small>Files, exports, feeds.</small></div>
+              <div class="service"><strong>Fix</strong><small>Rules, scripts, flows.</small></div>
+              <div class="service"><strong>Ship</strong><small>Docs and handoff.</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="details">
+      <div class="detail"><h4>Brand Strategy</h4><p>The strongest technical sub-brand. It speaks to a buyer who knows the workflow is broken but does not know how to turn the pain into a tool.</p><ul><li>Voice: diagnostic, plainspoken, lightly sarcastic.</li><li>Promise: reduce repeated manual work.</li><li>Buyer feeling: “This person understands my spreadsheet hell.”</li></ul></div>
+      <div class="detail"><h4>Palette</h4><div class="swatches"><div class="swatch" style="background:#10231d">Deep Green Ink<br>#10231D</div><div class="swatch light-swatch" style="background:#f2fbf7">Mint Paper<br>#F2FBF7</div><div class="swatch" style="background:#047857">Mechanic Green<br>#047857</div><div class="swatch" style="background:#10b981">Signal<br>#10B981</div><div class="swatch light-swatch" style="background:#e6f7ef">Soft Mint<br>#E6F7EF</div></div></div>
+      <div class="detail"><h4>Typography</h4><p><strong>Display:</strong> monospace only for the brand title and labels. <strong>Body:</strong> system sans to avoid low-readability nerd fog.</p><div class="contrast-check"><div class="contrast-row"><span>Body copy</span><strong>#455C54 on white</strong></div><div class="contrast-row"><span>Buttons</span><strong>White on #047857</strong></div></div></div>
+      <div class="detail"><h4>SVG Strategy</h4><p>Data sliders + wrench shape. The mark can animate later: slider nodes moving, rows resolving into a check.</p><div class="svg-row"><div class="svg-tile"><svg viewBox="0 0 128 128"><rect width="128" height="128" rx="30" fill="#ffffff"/><path d="M30 38h68M30 64h68M30 90h68" stroke="#047857" stroke-width="10" stroke-linecap="round"/><circle cx="48" cy="38" r="9" fill="#0b1220"/><circle cx="82" cy="64" r="9" fill="#0b1220"/><circle cx="61" cy="90" r="9" fill="#0b1220"/><path d="M91 24l13 13-18 18-13-13z" fill="#10b981"/></svg></div><div class="svg-tile"><svg viewBox="0 0 128 128"><circle cx="64" cy="64" r="46" fill="#ecfdf5" stroke="#047857" stroke-width="10"/><path d="M43 70l16 16 33-43" fill="none" stroke="#0b1220" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="svg-tile"><svg viewBox="0 0 128 128"><path d="M26 89l41-41 13 13-41 41H26z" fill="#047857"/><path d="M70 38c12-14 31-13 40 0L92 56 72 36z" fill="#10b981"/></svg></div></div></div>
+    </div>
+  </section>
+
+  <section id="c4" class="concept c4">
+    <div class="hero-grid">
+      <div class="brand-panel">
+        <div class="brand-lockup">
+          <svg class="brand-mark" viewBox="0 0 128 128" role="img" aria-label="Toolbox Local logo">
+            <rect width="128" height="128" rx="30" fill="#ffffff"/>
+            <rect x="24" y="45" width="80" height="54" rx="11" fill="#c2410c"/>
+            <path d="M44 45V34c0-7 5-12 12-12h16c7 0 12 5 12 12v11" fill="none" stroke="#291a10" stroke-width="8"/>
+            <path d="M34 67h60" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+            <circle cx="64" cy="73" r="8" fill="#1d4ed8"/>
+          </svg>
+          <h2 class="brand-name"><span>THE TECH</span><span>TOOLBOX</span></h2>
+        </div>
+        <p class="tagline">The least AI-buzzwordy direction: approachable, concrete, and built for local business owners.</p>
+        <div class="pill-row">
+          <span class="pill">Local business</span>
+          <span class="pill">Concrete</span>
+          <span class="pill">Friendly</span>
+          <span class="pill">Low intimidation</span>
+        </div>
+        <div class="usage-strip">
+          <div class="usage"><strong>Use for</strong> Restaurants, trades, local services.</div>
+          <div class="usage"><strong>Avoid</strong> Looking like a handyman franchise.</div>
+          <div class="usage"><strong>Line</strong> “Useful tech fixes for the rest of us.”</div>
+        </div>
+      </div>
+      <div class="preview-panel">
+        <div class="mock-site">
+          <div class="mock-topbar">
+            <div class="mini-lockup"><span class="mini-mark"></span> Tech Toolbox</div>
+            <button class="cta">Get a fix</button>
+          </div>
+          <div class="mock-body">
+            <h3>Small business tech should not require a séance.</h3>
+            <p>Websites, forms, files, reports, and other tiny disasters cleaned up fast.</p>
+            <div class="service-grid">
+              <div class="service"><strong>Fix</strong><small>Broken public stuff.</small></div>
+              <div class="service"><strong>Build</strong><small>Small internal tools.</small></div>
+              <div class="service"><strong>Explain</strong><small>Plain-English handoff.</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="details">
+      <div class="detail"><h4>Brand Strategy</h4><p>This is strongest when selling to practical owners who do not want “AI transformation.” It makes the service feel tangible and non-threatening.</p><ul><li>Voice: neighborly, direct, useful.</li><li>Promise: fix the thing, explain the thing, leave no mess.</li><li>Buyer feeling: “Finally, not an agency pitch.”</li></ul></div>
+      <div class="detail"><h4>Palette</h4><div class="swatches"><div class="swatch" style="background:#291a10">Tool Ink<br>#291A10</div><div class="swatch light-swatch" style="background:#fff8ef">Worklight<br>#FFF8EF</div><div class="swatch" style="background:#c2410c">Tool Orange<br>#C2410C</div><div class="swatch" style="background:#1d4ed8">Shop Blue<br>#1D4ED8</div><div class="swatch light-swatch" style="background:#f8ead6">Bench Tan<br>#F8EAD6</div></div></div>
+      <div class="detail"><h4>Typography</h4><p><strong>Display:</strong> Impact/Arial Black. <strong>Body:</strong> system sans. Use big type sparingly so it feels sturdy, not shouty.</p><div class="contrast-check"><div class="contrast-row"><span>Body copy</span><strong>#5F5146 on white</strong></div><div class="contrast-row"><span>Buttons</span><strong>White on #C2410C</strong></div></div></div>
+      <div class="detail"><h4>SVG Strategy</h4><p>Toolbox, wrench, bolt, checklist. Use simple shapes that could work on a truck magnet, invoice, or tiny favicon.</p><div class="svg-row"><div class="svg-tile"><svg viewBox="0 0 128 128"><rect width="128" height="128" rx="30" fill="#ffffff"/><rect x="24" y="45" width="80" height="54" rx="11" fill="#c2410c"/><path d="M44 45V34c0-7 5-12 12-12h16c7 0 12 5 12 12v11" fill="none" stroke="#291a10" stroke-width="8"/><path d="M34 67h60" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/><circle cx="64" cy="73" r="8" fill="#1d4ed8"/></svg></div><div class="svg-tile"><svg viewBox="0 0 128 128"><path d="M36 92l48-48" stroke="#c2410c" stroke-width="16" stroke-linecap="round"/><circle cx="90" cy="38" r="22" fill="none" stroke="#291a10" stroke-width="10"/><path d="M31 97l-10 10" stroke="#1d4ed8" stroke-width="10" stroke-linecap="round"/></svg></div><div class="svg-tile"><svg viewBox="0 0 128 128"><rect x="25" y="25" width="78" height="78" rx="20" fill="#c2410c"/><path d="M47 66l12 12 26-31" fill="none" stroke="#fff8ef" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 36h18M36 51h12" stroke="#291a10" stroke-width="7" stroke-linecap="round"/></svg></div></div></div>
+    </div>
+  </section>
+
+  <section id="c5" class="concept c5">
+    <div class="hero-grid">
+      <div class="brand-panel">
+        <div class="brand-lockup">
+          <svg class="brand-mark" viewBox="0 0 128 128" role="img" aria-label="Workflow Goblin logo">
+            <rect width="128" height="128" rx="30" fill="#ffffff"/>
+            <path d="M33 68c0-23 14-39 31-39s31 16 31 39-14 33-31 33-31-10-31-33z" fill="#a3cf1a"/>
+            <path d="M41 54l-20-13 14 26M87 54l20-13-14 26" fill="#a3cf1a"/>
+            <circle cx="53" cy="64" r="6" fill="#1d260d"/>
+            <circle cx="75" cy="64" r="6" fill="#1d260d"/>
+            <path d="M53 82c8 6 14 6 22 0" fill="none" stroke="#1d260d" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="96" cy="28" r="9" fill="#c026d3"/>
+          </svg>
+          <h2 class="brand-name"><span>WORKFLOW</span><span>GOBLIN</span></h2>
+        </div>
+        <p class="tagline">Weird enough to remember, useful enough to sell — best as a content hook or sub-brand.</p>
+        <div class="pill-row">
+          <span class="pill">Memorable</span>
+          <span class="pill">Funny</span>
+          <span class="pill">Content-friendly</span>
+          <span class="pill">Riskier main brand</span>
+        </div>
+        <div class="usage-strip">
+          <div class="usage"><strong>Use for</strong> Memes, lead magnets, productized tools.</div>
+          <div class="usage"><strong>Avoid</strong> Conservative professional services buyers.</div>
+          <div class="usage"><strong>Line</strong> “Stop feeding the workflow goblins.”</div>
+        </div>
+      </div>
+      <div class="preview-panel">
+        <div class="mock-site">
+          <div class="mock-topbar">
+            <div class="mini-lockup"><span class="mini-mark"></span> Workflow Goblin</div>
+            <button class="cta">Summon help</button>
+          </div>
+          <div class="mock-body">
+            <h3>Tiny tools for ugly little business problems.</h3>
+            <p>Dashboards, scripts, automations, and forms that stop the goblins from eating your day.</p>
+            <div class="service-grid">
+              <div class="service"><strong>Goblin Audit</strong><small>Find the broken bits.</small></div>
+              <div class="service"><strong>Goblin Fix</strong><small>Patch the workflow.</small></div>
+              <div class="service"><strong>Goblin Trap</strong><small>Prevent repeat chaos.</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="details">
+      <div class="detail"><h4>Brand Strategy</h4><p>This could get attention quickly, but I would not lead with it for trust-sensitive buyers. Great for recurring content and a playful product line.</p><ul><li>Voice: funny, sharp, maker-ish.</li><li>Promise: identify and trap repetitive workflow monsters.</li><li>Buyer feeling: “Okay, that’s weird — but I remember it.”</li></ul></div>
+      <div class="detail"><h4>Palette</h4><div class="swatches"><div class="swatch" style="background:#1d260d">Goblin Ink<br>#1D260D</div><div class="swatch light-swatch" style="background:#fbffef">Bone Paper<br>#FBFFEF</div><div class="swatch" style="background:#5b7c00">Deep Lime<br>#5B7C00</div><div class="swatch" style="background:#c026d3">Chaos Purple<br>#C026D3</div><div class="swatch light-swatch" style="background:#eff9d4">Soft Lime<br>#EFF9D4</div></div></div>
+      <div class="detail"><h4>Typography</h4><p><strong>Display:</strong> extra-heavy system sans. <strong>Body:</strong> system sans. Keep the words clean because the mascot is already doing theater.</p><div class="contrast-check"><div class="contrast-row"><span>Body copy</span><strong>#55603E on white</strong></div><div class="contrast-row"><span>Buttons</span><strong>White on #5B7C00</strong></div></div></div>
+      <div class="detail"><h4>SVG Strategy</h4><p>A mascot face paired with boring-business icons: files, forms, charts, checkmarks. Makes operational pain shareable.</p><div class="svg-row"><div class="svg-tile"><svg viewBox="0 0 128 128"><rect width="128" height="128" rx="30" fill="#ffffff"/><path d="M33 68c0-23 14-39 31-39s31 16 31 39-14 33-31 33-31-10-31-33z" fill="#a3cf1a"/><path d="M41 54l-20-13 14 26M87 54l20-13-14 26" fill="#a3cf1a"/><circle cx="53" cy="64" r="6" fill="#1d260d"/><circle cx="75" cy="64" r="6" fill="#1d260d"/><path d="M53 82c8 6 14 6 22 0" fill="none" stroke="#1d260d" stroke-width="6" stroke-linecap="round"/><circle cx="96" cy="28" r="9" fill="#c026d3"/></svg></div><div class="svg-tile"><svg viewBox="0 0 128 128"><path d="M30 92h68V41H30z" fill="#a3cf1a"/><path d="M43 57h42M43 72h28" stroke="#1d260d" stroke-width="8" stroke-linecap="round"/><path d="M25 41l14-18 8 18M103 41L89 23l-8 18" fill="#a3cf1a"/></svg></div><div class="svg-tile"><svg viewBox="0 0 128 128"><circle cx="64" cy="64" r="43" fill="#a3cf1a"/><path d="M45 59l11 12 28-31" fill="none" stroke="#1d260d" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 38l-16-8 8 18M95 38l16-8-8 18" fill="#a3cf1a"/></svg></div></div></div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <strong>Recommendation:</strong> for the actual offer page, use <code>Human Guru</code> as the main identity with <code>Toolbox Local</code> language in the copy. Keep <code>Data Mechanic</code> as a package/service lane and <code>Workflow Goblin</code> as content bait, not the first handshake.
+  </div>
+</div>
+
+<script>
+  const tabs = [...document.querySelectorAll('.tab')];
+  const concepts = [...document.querySelectorAll('.concept')];
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const id = tab.dataset.target;
+      tabs.forEach(t => t.classList.toggle('active', t === tab));
+      concepts.forEach(c => c.classList.toggle('active', c.id === id));
+    });
+  });
+</script>
+</body>
+</html>
