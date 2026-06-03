@@ -21,3 +21,7 @@ http://localhost:8000/
 - The page is intentionally dependency-free: semantic HTML and embedded CSS only.
 - Contact CTAs currently use `mailto:hank@aismallbizguru.com`.
 - A real intake form backend should replace the `mailto:` fallback before launch if form-based booking is preferred.
+
+## Version Footer
+
+The footer includes a visible, agent-managed deploy version using the `AISBG_DEPLOY_FOOTER` marker in `index.html`. When committing a change to `index.html`, update the footer version using `YYYY.MM.DD.N`, incrementing `N` for each commit on the same day and resetting to `.1` on a new day.

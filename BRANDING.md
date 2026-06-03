@@ -835,3 +835,24 @@ Use **Data Mechanic** as a service lane.
 Use **Workflow Goblin** as content bait or a playful productized sub-brand.
 
 Do not let the brand drift into dark hacker cave, fake agency, or AI-grift territory.
+
+---
+
+## 19. Deploy Footer and Versioning
+
+The production page should include a visible, machine-discoverable version footer. This is agent-managed as part of the change process, not updated by a Git hook.
+
+Use this marker pattern in `index.html`:
+
+```html
+<!-- AISBG_DEPLOY_FOOTER version="YYYY.MM.DD.N" bump="Update this version whenever this file changes in a commit." -->
+<p class="site-version" data-aisbg-deploy-footer data-deploy-version="YYYY.MM.DD.N" aria-label="Site version">version YYYY.MM.DD.N</p>
+```
+
+### Version Rules
+
+- Format: `YYYY.MM.DD.N`
+- Update the footer version whenever `index.html` changes in a commit.
+- Increment `N` for each commit on the same calendar day.
+- Reset to `.1` on a new calendar day.
+- Keep the comment version, `data-deploy-version`, and visible footer text identical.
