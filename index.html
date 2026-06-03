@@ -36,7 +36,6 @@
 
     html {
       scroll-behavior: smooth;
-      scroll-padding-top: 96px;
     }
 
     body {
@@ -196,7 +195,7 @@
       max-width: var(--max);
       margin: 0 auto;
       padding: 5rem 1.25rem;
-      scroll-margin-top: 96px;
+      scroll-margin-top: 1.25rem;
     }
 
     .hero {
@@ -532,7 +531,9 @@
       list-style: none;
     }
 
-    .cred-list li {
+    .card .cred-list li {
+      position: static;
+      list-style: none;
       border: 1px solid var(--line);
       border-radius: 16px;
       background: #fff;
@@ -541,8 +542,9 @@
       font-weight: 850;
     }
 
-    .cred-list li::before {
+    .card .cred-list li::before {
       content: none;
+      display: none;
     }
 
     .example {
@@ -611,12 +613,8 @@
     }
 
     @media (max-width: 980px) {
-      html {
-        scroll-padding-top: 164px;
-      }
-
       .section {
-        scroll-margin-top: 164px;
+        scroll-margin-top: 1rem;
       }
 
       .nav {
@@ -649,14 +647,6 @@
     }
 
     @media (max-width: 640px) {
-      html {
-        scroll-padding-top: 148px;
-      }
-
-      .section {
-        scroll-margin-top: 148px;
-      }
-
       .section {
         padding: 3.5rem 1rem;
       }
