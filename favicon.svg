@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="AI Small Business Guru favicon">
+  <rect width="64" height="64" rx="16" fill="#fffaf0"/>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="none" stroke="#b9c3cf" stroke-width="2"/>
+  <circle cx="32" cy="24" r="11" fill="#f59e0b"/>
+  <path d="M17 52c4-13 12-20 15-20s11 7 15 20" fill="#15803d"/>
+  <path d="M19 21c5-9 15-12 25-6" fill="none" stroke="#1f2933" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M41 15l7-7 2 10" fill="none" stroke="#1f2933" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M23 29h18" stroke="#1f2933" stroke-width="3.5" stroke-linecap="round"/>
+</svg>
