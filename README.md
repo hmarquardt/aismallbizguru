@@ -43,13 +43,16 @@ Cloudflare remains the authoritative DNS provider and existing edge proxy.
 
 Canonical policy: HTTPS apex `https://aismallbizguru.com/`, with `www` redirecting
 to apex through GitHub Pages once both DNS records and its custom domain are
-configured. The initial discovery found apex Cloudflare error 1016 (origin DNS
-failure), and no public `www` answer through 1.1.1.1. Existing authorized Cloudflare
+configured. Public DNS-over-HTTPS checks found no usable apex A answer and
+`www` NXDOMAIN. Requests sent directly to the zone’s Cloudflare edge with the
+apex or `www` hostname returned HTTP 530 / error 1016 (origin DNS failure).
+Existing authorized Cloudflare
 credentials returned 403 for zone DNS records and rulesets, so record contents
 could not be inspected or safely repaired. Do not change records blindly.
 
-An owner with zone DNS access must inspect existing apex and `www` records and
-point only those website records at the existing GitHub Pages host according to
+An owner with zone DNS access must first configure `aismallbizguru.com` as the
+custom domain in this repository’s Pages settings, then inspect existing apex and
+`www` records and point only those website records at the existing Pages host according to
 [GitHub's custom-domain instructions](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site), then verify the apex TLS certificate
 and `www` redirect. The existing Pages fallback is
 https://hmarquardt.github.io/aismallbizguru/ until custom-domain activation.
