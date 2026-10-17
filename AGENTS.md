@@ -76,6 +76,7 @@ Default to surfacing uncertainty, limitations, and skipped work.
 ## Homepage maintenance
 
 - Keep `main` as the production source and `.github/workflows/production.yml` as the only deployment path. Run `npm run check`, `npm run build`, and `npm test` before publishing.
+- Cloudflare Worker `aismallbizguru-site` is the sole host; never restore GitHub Pages publishing. Keep the Worker limited to canonical redirects and the ASSETS binding.
 - Publish only the explicit asset list in `scripts/build.mjs`; keep credentials, reference designs, and development files out of `dist/`.
 - Increment the `AISBG_DEPLOY_FOOTER` date/version whenever committing an `index.html` change.
 - Reserve `/getting-started` until implemented; never publish a placeholder link as a working guide.

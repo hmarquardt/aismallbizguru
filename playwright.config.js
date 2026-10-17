@@ -9,8 +9,9 @@ export default defineConfig({
     ? undefined
     : {
         command:
-          "python3 -m http.server 8176 --bind 127.0.0.1 --directory dist",
+          "npx wrangler dev --config wrangler.json --local --ip 127.0.0.1 --port 8176",
         url: "http://127.0.0.1:8176",
+        env: { WRANGLER_SEND_METRICS: "false" },
         reuseExistingServer: false,
       },
 });

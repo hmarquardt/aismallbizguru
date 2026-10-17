@@ -106,3 +106,14 @@ test("navigation works without JavaScript", async ({ browser }) => {
   await expect(page).toHaveURL(/#ownership$/);
   await context.close();
 });
+
+if (!process.env.SITE_URL) {
+  test("Cloudflare runtime redirects www before serving static assets", async ({ request }) => {
+    const response = await request.get("/styles.css?q=a%2Fb&q=&flag", {
+      headers: { Host: "www.aismallbizguru.com" },
+      maxRedirects: 0,
+    });
+    expect(response.status()).toBe(308);
+    expect(response.headers().location).toBe("https://aismallbizguru.com/styles.css?q=a%2Fb&q=&flag");
+  });
+}

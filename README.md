@@ -10,6 +10,7 @@ automation, and AI, with client ownership from the start.
 - `scripts/build.mjs`: copies only approved public files to `dist/`, adding a
   `version.json` containing the source commit SHA. Documentation, archived designs,
   tests, and development files are never published.
+- `wrangler.json`, `site-worker.mjs`: isolated Cloudflare hosting and canonical redirect.
 - `tests/`, `scripts/check.mjs`: browser, accessibility, HTML, links, metadata,
   deployment configuration, and common secret-pattern checks.
 
@@ -24,40 +25,68 @@ npm run preview
 
 Open http://localhost:8000. Node 24 and Python 3 are needed for development;
 production has no runtime npm dependencies, backend, tracking, database, or auth.
+`npm run preview:cloudflare` previews the actual Worker locally on port 8177.
+Browser tests use Wrangler on port 8176, not the simple Python preview.
 
 ## Production and domain routing
 
-The existing repository is `hmarquardt/aismallbizguru`; `main` is production.
-`.github/workflows/production.yml` is the sole deployment path: validate HTML and
-configuration, build an explicit static artifact, pass Chromium tests at 320,
-390, 768, and 1440 pixels (including axe accessibility checks), then deploy to the
-existing GitHub Pages site using GitHub's short-lived deployment identity. Actions
-are pinned to commit SHAs. Pull requests validate without deploying. Never publish
-manually or enable an additional Cloudflare/Git auto-deploy for the same site.
+Cloudflare Workers Static Assets is the sole production host. Worker
+`aismallbizguru-site` serves the unchanged `dist/` build through the `ASSETS`
+binding. `site-worker.mjs` only redirects `www.aismallbizguru.com` to the HTTPS
+apex with status 308, preserving the path and query, then delegates other requests
+to static assets. Running the handler first ensures asset URLs also redirect.
+There are no D1, R2, authentication, or other application bindings.
 
-GitHub Pages previously published the repository root through its legacy build.
-Its build source is now GitHub Actions; the legacy automatic build is disabled. There is
-no existing Cloudflare Pages project for this site; reusing the established static
-host avoids a new project, Worker, credential, or competing deployment system.
-Cloudflare remains the authoritative DNS provider and existing edge proxy.
+Cloudflare deployment URL: https://aismallbizguru-site.hmarquardt.workers.dev/.
+The intended custom-domain URL remains https://aismallbizguru.com/.
 
-Canonical policy: HTTPS apex `https://aismallbizguru.com/`, with `www` redirecting
-to apex through GitHub Pages once both DNS records and its custom domain are
-configured. Public DNS-over-HTTPS checks found no usable apex A answer and
-`www` NXDOMAIN. Requests sent directly to the zone’s Cloudflare edge with the
-apex or `www` hostname returned HTTP 530 / error 1016 (origin DNS failure).
-Existing authorized Cloudflare
-credentials returned 403 for zone DNS records and rulesets, so record contents
-could not be inspected or safely repaired. Do not change records blindly.
+`main` in `hmarquardt/aismallbizguru` is the source of truth.
+`.github/workflows/production.yml` is the only production pipeline. It validates
+HTML, routing, configuration, and the Wrangler bundle, then runs browser tests
+against the local Cloudflare runtime at 320, 390, 768, and 1440 pixels. After
+validation, the deployment job checks out the same commit, rebuilds the static
+output, deploys only `aismallbizguru-site`, and verifies its public revision over
+HTTPS. Actions and Wrangler are pinned. Pull requests do not deploy. Do not enable
+a second Cloudflare Git integration or restore GitHub Pages publishing.
 
-An owner with zone DNS access must first configure `aismallbizguru.com` as the
-custom domain in this repository’s Pages settings, then inspect existing apex and
-`www` records and point only those website records at the existing Pages host according to
-[GitHub's custom-domain instructions](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site), then verify the apex TLS certificate
-and `www` redirect. The existing Pages fallback is
-https://hmarquardt.github.io/aismallbizguru/ until custom-domain activation.
-No production availability at the branded domain should be claimed before these
-checks pass. The source canonical URL intentionally describes the final domain.
+Unattended deployment requires repository Actions secret `CLOUDFLARE_API_TOKEN`
+containing an existing account-owned Workers deployment credential for the account
+in `wrangler.json`. It is never committed or printed. A missing secret fails the
+job explicitly. The migration found no such secret in this repository; the local
+rotating Wrangler OAuth login can bootstrap the committed, validated deployment,
+but must not be copied into GitHub as an unattended credential. No new token or
+broader permissions are required if the existing CFLab deploy credential is
+available. GitHub cannot reveal the contents of an existing repository secret.
+
+Custom-domain activation is pending. Both existing credentials returned 403 for
+zone DNS reads, so current apex/`www` record contents could not be inspected. No
+DNS records, zone rules, or custom domains were changed blindly. Public checks
+previously found no usable apex A answer and `www` NXDOMAIN. Direct Cloudflare edge
+requests returned HTTP 530 / error 1016.
+
+To activate the domains, an owner with DNS access must inspect only the apex and
+`www` records, identify any records that conflict, and confirm they can be
+replaced without affecting another service. Then add these exact entries to
+`wrangler.json` and deploy through the same pipeline:
+
+```json
+"routes": [
+  { "pattern": "aismallbizguru.com", "custom_domain": true },
+  { "pattern": "www.aismallbizguru.com", "custom_domain": true }
+]
+```
+
+Cloudflare Custom Domains provision DNS and HTTPS for these exact hostnames. An
+existing conflicting CNAME must be resolved by its owner first. Do not use a
+wildcard, replace a zone configuration, or alter email/CFLab records. See
+[Cloudflare Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/).
+After activation, verify apex HTTPS, the `www` 308 redirect (including path/query),
+and the deployed `/version.json`. Until then, a verified workers.dev deployment
+does not imply that the branded domain is live.
+
+GitHub Pages deployment actions and permissions have been removed. The old Pages
+publication must be disabled after the Cloudflare deployment is verified; it is
+not a fallback or a production target.
 
 CFLab is independent: `cflab.aismallbizguru.com` is a custom domain of Worker
 `cflab`, `lab.aismallbizguru.com/*` routes there, and
@@ -72,7 +101,7 @@ three hosts returned 200 with their expected service identities.
 Edit the source files, run checks and browser tests, commit and push to `main`.
 Update the `AISBG_DEPLOY_FOOTER` version in `index.html` whenever it changes:
 `YYYY.MM.DD.N`, incrementing N per same-day commit. `dist/` is ignored and rebuilt
-in CI. Verify `/version.json` against the GitHub deployment commit after release.
+in CI. Verify `/version.json` against the Cloudflare deployment commit after release.
 Use `SITE_URL=https://aismallbizguru.com EXPECTED_COMMIT=<sha> npm test` for live
 root-hosted browser verification once DNS is repaired.
 

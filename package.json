@@ -5,13 +5,16 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "check": "html-validate index.html 404.html && node scripts/check.mjs",
+    "check": "html-validate index.html 404.html && node scripts/check.mjs && node --test tests/routing.node.mjs",
     "test": "playwright test",
-    "preview": "python3 -m http.server 8000 --directory dist"
+    "preview": "python3 -m http.server 8000 --directory dist",
+    "deploy": "wrangler deploy --config wrangler.json --no-x-provision",
+    "preview:cloudflare": "wrangler dev --config wrangler.json --port 8177"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
     "@playwright/test": "^1.64.1",
-    "html-validate": "^11.16.2"
+    "html-validate": "^11.16.2",
+    "wrangler": "4.151.1"
   }
 }
