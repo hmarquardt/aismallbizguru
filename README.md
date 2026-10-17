@@ -84,9 +84,18 @@ After activation, verify apex HTTPS, the `www` 308 redirect (including path/quer
 and the deployed `/version.json`. Until then, a verified workers.dev deployment
 does not imply that the branded domain is live.
 
-GitHub Pages deployment actions and permissions have been removed. The old Pages
-publication must be disabled after the Cloudflare deployment is verified; it is
-not a fallback or a production target.
+GitHub Pages deployment actions and permissions have been removed. After the
+Cloudflare HTTPS deployment and live browser suite passed, the old Pages
+publication and its unused `github-pages` environment were deleted. GitHub Pages
+is not a fallback or a production target.
+
+Migration validation passed in Actions run
+[38985265482](https://github.com/hmarquardt/aismallbizguru/actions/runs/38985265482).
+Its deploy job failed explicitly at the missing-secret preflight. The initial
+Cloudflare deployment therefore used the existing local OAuth login against the
+committed, CI-validated build; this bootstrap does not establish unattended CI.
+The next automated deployment remains blocked until the existing account-owned
+credential is supplied as the repository secret.
 
 CFLab is independent: `cflab.aismallbizguru.com` is a custom domain of Worker
 `cflab`, `lab.aismallbizguru.com/*` routes there, and
