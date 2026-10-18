@@ -57,18 +57,46 @@ jobs:
         env:
           EXPECTED_COMMIT: ${{ github.sha }}
         run: |
-          python3 - <<'PY'
-          import json, os, time, urllib.request
-          url = os.environ['SITE_URL'].rstrip('/') + '/version.json'
-          for attempt in range(12):
-              try:
-                  with urllib.request.urlopen(url + '?revision=' + os.environ['EXPECTED_COMMIT'], timeout=15) as response:
-                      assert response.status == 200
-                      assert json.load(response)['commit'] == os.environ['EXPECTED_COMMIT']
-                  print('Cloudflare HTTPS revision matches', os.environ['EXPECTED_COMMIT'])
-                  break
-              except Exception:
-                  if attempt == 11:
-                      raise
-                  time.sleep(10)
+          verification_dir=$(mktemp -d)
+          headers="$verification_dir/headers.txt"
+          body="$verification_dir/version.json"
+          url="${SITE_URL%/}/version.json?revision=$EXPECTED_COMMIT"
+          for attempt in {1..12}; do
+            : > "$headers"
+            : > "$body"
+            if status=$(curl --silent --show-error --proto '=https' \
+              --connect-timeout 10 --max-time 20 \
+              --user-agent 'aismallbizguru-ci-verifier/1.0' \
+              --header 'Accept: application/json' \
+              --header 'Cache-Control: no-cache' \
+              --dump-header "$headers" --output "$body" \
+              --write-out '%{http_code}' "$url"); then
+              curl_exit=0
+            else
+              curl_exit=$?
+            fi
+            if [[ "$curl_exit" -eq 0 && "$status" == "200" ]]; then
+              if python3 - "$body" "$EXPECTED_COMMIT" <<'PY'
+          import json, sys
+          with open(sys.argv[1]) as response:
+              actual = json.load(response).get('commit')
+          if actual != sys.argv[2]:
+              raise SystemExit(f"Revision mismatch: expected {sys.argv[2]}, received {actual!r}")
           PY
+              then
+                echo "Cloudflare HTTPS revision matches $EXPECTED_COMMIT (HTTP $status)"
+                exit 0
+              fi
+            fi
+            echo "::warning::Verification attempt $attempt/12 failed: HTTP $status, curl exit $curl_exit"
+            echo "Response headers:"
+            cat "$headers"
+            ray_id=$(awk 'tolower($1) == "cf-ray:" {gsub("\r", "", $2); print $2}' "$headers")
+            echo "Cloudflare Ray ID: ${ray_id:-not provided}"
+            echo "Response body (first 1024 bytes):"
+            head -c 1024 "$body"
+            echo
+            if (( attempt < 12 )); then sleep 10; fi
+          done
+          echo '::error::Cloudflare HTTPS revision verification failed after 12 attempts.'
+          exit 1
