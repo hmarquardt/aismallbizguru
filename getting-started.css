@@ -1,0 +1,754 @@
+/* Getting-started guide: page-specific layout on top of the shared brand styles. */
+.guide-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.75fr);
+  gap: 70px;
+  align-items: center;
+  padding-block: 72px 64px;
+}
+.guide-hero h1 {
+  font-size: clamp(2.9rem, 5.2vw, 4.6rem);
+}
+.guide-hero h1 em {
+  color: var(--green);
+}
+.guide-hero .lead {
+  margin-top: 26px;
+  color: var(--muted);
+}
+.hero-detail {
+  max-width: 620px;
+  margin-top: 18px;
+  font-size: 15px;
+  color: #46574d;
+}
+.handoff-card {
+  transform: none;
+  box-shadow: 10px 10px 0 #e5e8dc;
+}
+.progress-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 50px;
+  align-items: center;
+  padding: 38px 42px;
+  margin-bottom: 20px;
+  background: var(--green);
+  color: var(--paper);
+  border-radius: 5px;
+}
+.progress-panel .eyebrow {
+  margin-bottom: 14px;
+  color: var(--accent);
+}
+.progress-panel h2 {
+  font-size: clamp(1.9rem, 3vw, 2.6rem);
+  color: var(--white);
+}
+.progress-text {
+  margin-top: 16px;
+  color: #e1e7db;
+  font-size: 15px;
+}
+.progress-tools {
+  min-width: 0;
+}
+.progress-panel progress {
+  display: block;
+  width: 100%;
+  height: 12px;
+  border: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #406052;
+  appearance: none;
+}
+.progress-panel progress::-webkit-progress-bar {
+  background: #406052;
+}
+.progress-panel progress::-webkit-progress-value {
+  background: var(--accent);
+}
+.progress-panel progress::-moz-progress-bar {
+  background: var(--accent);
+}
+.progress-note {
+  margin-top: 12px;
+  color: #d5dfd2;
+  font-size: 12px;
+}
+.progress-actions {
+  display: none;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+.js .progress-actions {
+  display: flex;
+}
+.progress-panel .button {
+  min-height: 44px;
+  padding: 10px 15px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.progress-panel .button.secondary {
+  background: transparent;
+  border-color: #9db1a5;
+  color: var(--white);
+}
+.progress-panel .button.secondary:hover {
+  background: #2c5848;
+}
+.progress-panel .button.quiet {
+  background: transparent;
+  border-color: transparent;
+  color: #e1e7db;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.progress-panel .button.quiet:hover {
+  color: var(--white);
+}
+.progress-panel a:focus-visible,
+.progress-panel button:focus-visible {
+  outline-color: var(--accent);
+}
+.status {
+  min-height: 1.4em;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--accent);
+}
+.print-summary {
+  display: none;
+}
+.guide-section {
+  display: grid;
+  grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr);
+  gap: 80px;
+  padding-block: 80px;
+  border-top: 1px solid var(--line);
+  scroll-margin-top: 110px;
+}
+.section-rail {
+  align-self: start;
+}
+.section-rail h2 {
+  font-size: clamp(2.1rem, 3.3vw, 3rem);
+}
+.section-lead {
+  margin-top: 22px;
+  color: var(--muted);
+  font-size: 16px;
+}
+.section-content > p,
+.section-content > .callout,
+.section-content > .setup-guide,
+.section-content > .checklist,
+.section-content > .provider-card,
+.section-content > .service-examples,
+.section-content > .principle-list,
+.section-content > .cost-panel,
+.section-content > .transition-steps,
+.section-content > .skip-toggle,
+.section-content > .guide-finish {
+  margin-top: 24px;
+}
+.section-content > p:first-child {
+  margin-top: 0;
+}
+.section-content h3 {
+  margin-bottom: 10px;
+}
+.section-content h4 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+.callout {
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--green);
+  border-radius: 3px;
+  background: #f0f1e8;
+}
+.callout h3,
+.callout h4 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+.callout p {
+  font-size: 14px;
+  color: #3d4f45;
+}
+.callout p + p {
+  margin-top: 10px;
+}
+.callout-soft {
+  margin-top: 24px;
+  border-left-color: #7d927f;
+  background: #f4f4ec;
+}
+.setup-guide {
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--white);
+}
+.setup-guide summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 22px;
+  cursor: pointer;
+  font-weight: 650;
+  font-size: 14px;
+  list-style-position: inside;
+}
+.setup-guide summary:hover {
+  background: #f4f4ec;
+}
+.summary-hint {
+  flex: none;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.setup-guide[open] summary {
+  border-bottom: 1px solid var(--line);
+}
+.guide-body {
+  padding: 24px 22px 26px;
+}
+.guide-body > p {
+  margin-top: 18px;
+  font-size: 14px;
+  color: #3d4f45;
+}
+.numbered-guide {
+  margin: 0;
+  padding-left: 24px;
+}
+.numbered-guide li {
+  padding-left: 8px;
+}
+.numbered-guide li + li {
+  margin-top: 20px;
+}
+.numbered-guide p {
+  font-size: 14px;
+  color: #3d4f45;
+}
+.numbered-guide h3,
+.numbered-guide h4 {
+  font-size: 1rem;
+}
+.guide-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-size: 12px;
+  font-weight: 600;
+}
+.guide-links a {
+  text-underline-offset: 3px;
+}
+.checklist {
+  margin-inline: 0;
+  padding: 4px 20px 8px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--white);
+}
+.checklist legend {
+  padding: 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.checklist-status {
+  margin-left: 8px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+.checklist-status.is-complete {
+  color: var(--green);
+}
+.check-item {
+  display: flex;
+  gap: 13px;
+  align-items: flex-start;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+  cursor: pointer;
+}
+.check-item input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  accent-color: var(--green);
+}
+.check-text {
+  font-size: 14px;
+  line-height: 1.55;
+}
+.check-item.is-done .check-text::after {
+  content: " ✓";
+  color: var(--green);
+  font-weight: 700;
+}
+.check-item:has(input:checked) .check-text {
+  color: #46574d;
+}
+.check-item:has(input:disabled) {
+  cursor: default;
+  color: var(--muted);
+}
+.provider-card {
+  padding: 30px 32px 32px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--white);
+}
+.provider-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+}
+.provider-kicker {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.provider-head h3 {
+  margin-top: 4px;
+  font-size: 2rem;
+}
+.badge {
+  flex: none;
+  padding: 6px 10px;
+  border: 1px solid #b9c4b4;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--green);
+  background: #eef2e2;
+}
+.badge span {
+  display: block;
+  margin-top: 3px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: #46574d;
+}
+.badge.optional {
+  background: #f3f1e8;
+  border-color: #cfcbbf;
+}
+.provider-purpose {
+  margin-top: 18px;
+  color: #3d4f45;
+  font-size: 15px;
+}
+.provider-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 24px 0 0;
+  padding: 18px 0;
+  border-block: 1px solid var(--line);
+}
+.provider-facts dt {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.provider-facts dd {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.55;
+  color: #3d4f45;
+}
+.inline-note {
+  margin-top: 18px;
+  padding: 12px 14px;
+  border-left: 3px solid #a9b79d;
+  background: #f6f6ef;
+  font-size: 13px;
+  color: #3d4f45;
+}
+.provider-card .setup-guide,
+.provider-card .checklist {
+  margin-top: 22px;
+}
+.skip-toggle {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 20px;
+  padding: 13px 15px;
+  border: 1px dashed #b9c4b4;
+  border-radius: 3px;
+  background: #f6f6ef;
+  cursor: pointer;
+}
+.skip-toggle input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 1px 0 0;
+  accent-color: var(--green);
+}
+.skip-toggle span {
+  font-size: 13px;
+  font-weight: 650;
+}
+.skip-toggle small {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.provider-card.is-skipped .checklist {
+  background: #f1f1ea;
+}
+.provider-card.is-skipped .check-text {
+  color: #5d6b62;
+}
+.service-examples {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 30px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.service-examples li {
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.service-examples strong {
+  display: block;
+  font-size: 14px;
+}
+.service-examples span {
+  display: block;
+  margin-top: 3px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.example-links {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin-top: 8px !important;
+  font-size: 12px !important;
+  font-weight: 600;
+}
+.example-links a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.cost-panel {
+  padding: 26px 28px;
+  border: 1px solid #c9d0bf;
+  border-radius: 4px;
+  background: #e9edde;
+}
+.cost-panel h3 {
+  font-size: 1.45rem;
+}
+.cost-panel > p {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #3d4f45;
+}
+.cost-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+  margin-top: 20px;
+}
+.cost-columns h4 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.cost-columns p {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #3d4f45;
+}
+.principle-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 30px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.principle-list li {
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.principle-list strong {
+  display: block;
+  font-size: 14px;
+}
+.principle-list span {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.principle-quote {
+  margin: 26px 0 0;
+  padding: 6px 0 6px 22px;
+  border-left: 4px solid var(--accent);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.45rem;
+  line-height: 1.4;
+  color: var(--green);
+}
+.transition-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: transition;
+}
+.transition-steps li {
+  position: relative;
+  padding: 20px 0 20px 54px;
+  border-top: 1px solid var(--line);
+  counter-increment: transition;
+}
+.transition-steps li::before {
+  content: counter(transition, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 21px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.transition-steps h3 {
+  font-size: 1.05rem;
+  margin-bottom: 5px;
+}
+.transition-steps p {
+  font-size: 14px;
+  color: #3d4f45;
+}
+.guide-finish {
+  padding: 30px 0 0;
+  border-top: 1px solid var(--line);
+}
+.guide-finish h3 {
+  font-size: 1.6rem;
+}
+.guide-finish p {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #3d4f45;
+}
+.guide-finish .button {
+  margin-top: 20px;
+}
+@media (max-width: 1000px) {
+  .guide-hero {
+    gap: 40px;
+    padding-block: 56px 50px;
+  }
+  .guide-section {
+    gap: 50px;
+  }
+  .progress-panel {
+    gap: 32px;
+    padding: 32px;
+  }
+}
+@media (max-width: 900px) {
+  .guide-hero {
+    grid-template-columns: 1fr;
+    gap: 38px;
+  }
+  .handoff-card {
+    max-width: 520px;
+  }
+  .progress-panel {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .guide-section {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-block: 60px;
+    scroll-margin-top: 94px;
+  }
+  .section-rail {
+    max-width: 620px;
+  }
+}
+@media (max-width: 700px) {
+  .guide-hero {
+    padding-block: 42px 40px;
+  }
+  .guide-hero h1 {
+    font-size: clamp(2.5rem, 10vw, 3.4rem);
+  }
+  .guide-hero .lead {
+    margin-top: 20px;
+    font-size: 17px;
+  }
+  .progress-panel {
+    padding: 26px 20px;
+  }
+  .progress-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .progress-panel .button {
+    width: 100%;
+  }
+  .guide-section {
+    padding-block: 48px;
+  }
+  .section-rail h2 {
+    font-size: 2.15rem;
+  }
+  .section-lead {
+    margin-top: 16px;
+    font-size: 15px;
+  }
+  .provider-card {
+    padding: 22px 16px 24px;
+  }
+  .provider-head {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .provider-head h3 {
+    font-size: 1.7rem;
+  }
+  .provider-facts {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .service-examples,
+  .principle-list {
+    grid-template-columns: 1fr;
+  }
+  .cost-panel {
+    padding: 22px 18px;
+  }
+  .cost-columns {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .setup-guide summary {
+    padding: 16px;
+  }
+  .guide-body {
+    padding: 20px 16px 22px;
+  }
+  .checklist {
+    padding: 4px 14px 8px;
+  }
+  .principle-quote {
+    font-size: 1.25rem;
+  }
+  .transition-steps li {
+    padding-left: 42px;
+  }
+  .guide-finish .button {
+    width: 100%;
+  }
+}
+@media (max-width: 360px) {
+  .guide-hero h1 {
+    font-size: 2.2rem;
+  }
+  .progress-panel {
+    padding: 22px 16px;
+  }
+}
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+  }
+  .skip-link,
+  .site-header,
+  .footer,
+  .guide-hero .actions,
+  .progress-actions,
+  .progress-tools,
+  .guide-finish .button,
+  .checklist,
+  .skip-toggle {
+    display: none !important;
+  }
+  .guide-hero,
+  .guide-section {
+    display: block;
+    width: 100%;
+    padding: 12pt 0;
+    border-top: 1px solid #999;
+  }
+  .guide-section {
+    break-inside: avoid;
+  }
+  .progress-panel {
+    display: block;
+    padding: 0 0 12pt;
+    margin: 0;
+    background: #fff;
+    color: #000;
+    border: 0;
+  }
+  .progress-panel h2,
+  .progress-panel .eyebrow,
+  .progress-text,
+  .progress-note {
+    color: #000;
+  }
+  .progress-tools progress {
+    display: none;
+  }
+  .print-summary {
+    display: block;
+    margin-top: 12pt;
+    padding-top: 12pt;
+    border-top: 2px solid #000;
+  }
+  .print-summary pre {
+    white-space: pre-wrap;
+    font-family: inherit;
+    font-size: 10.5pt;
+    line-height: 1.4;
+  }
+  .setup-guide summary {
+    padding: 8pt 0;
+  }
+  a {
+    color: #000;
+    text-decoration: underline;
+  }
+}

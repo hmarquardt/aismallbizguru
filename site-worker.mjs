@@ -2,10 +2,15 @@
 export default {
   fetch(request, env) {
     const url = new URL(request.url);
-    if (url.hostname === "www.aismallbizguru.com") {
-      url.protocol = "https:";
-      url.hostname = "aismallbizguru.com";
-      url.port = "";
+    const isWww = url.hostname === "www.aismallbizguru.com";
+    const hasGuideTrailingSlash = url.pathname === "/getting-started/";
+    if (isWww || hasGuideTrailingSlash) {
+      if (isWww) {
+        url.protocol = "https:";
+        url.hostname = "aismallbizguru.com";
+        url.port = "";
+      }
+      if (hasGuideTrailingSlash) url.pathname = "/getting-started";
       return Response.redirect(url.toString(), 308);
     }
     return env.ASSETS.fetch(request);

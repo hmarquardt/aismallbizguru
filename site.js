@@ -16,6 +16,7 @@ navigation.addEventListener("click", (event) => {
   const link = event.target.closest("a");
   if (!link) return;
   closeMenu();
+  if (!link.hash) return;
   const target = document.querySelector(link.hash);
   if (target) {
     target.setAttribute("tabindex", "-1");
@@ -27,5 +28,5 @@ document.addEventListener("keydown", (event) => {
     closeMenu(true);
 });
 window
-  .matchMedia("(min-width: 701px)")
+  .matchMedia("(min-width: 901px)")
   .addEventListener("change", () => closeMenu());

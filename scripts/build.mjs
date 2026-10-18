@@ -4,8 +4,11 @@ await rm("dist", { recursive: true, force: true });
 await mkdir("dist", { recursive: true });
 for (const file of [
   "index.html",
+  "getting-started.html",
   "styles.css",
+  "getting-started.css",
   "site.js",
+  "getting-started.js",
   "favicon.svg",
   "robots.txt",
   "sitemap.xml",

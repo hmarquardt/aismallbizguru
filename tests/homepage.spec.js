@@ -15,7 +15,7 @@ for (const width of [320, 390, 768, 1440]) {
         () => document.documentElement.scrollWidth <= innerWidth,
       ),
     ).toBe(true);
-    if (width < 701) {
+    if (width <= 900) {
       const toggle = page.getByRole("button", { name: "Menu" });
       await expect(page.getByRole("navigation")).toBeHidden();
       await toggle.click();
@@ -30,7 +30,7 @@ for (const width of [320, 390, 768, 1440]) {
       .getByRole("link", { name: "How we work" })
       .click();
     await expect(page).toHaveURL(/#how$/);
-    if (width < 701) await expect(page.getByRole("navigation")).toBeHidden();
+    if (width <= 900) await expect(page.getByRole("navigation")).toBeHidden();
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page
       .getByRole("link", { name: "Let's Talk About Your Project" })
@@ -46,7 +46,11 @@ for (const width of [320, 390, 768, 1440]) {
       .locator('a[href^="#"]')
       .evaluateAll((items) => items.map((a) => a.hash));
     for (const hash of links) expect(await page.locator(hash).count()).toBe(1);
-    await expect(page.locator('a[href="/getting-started"]')).toHaveCount(0);
+    const guideLinks = page.locator('a[href="/getting-started"]');
+    expect(await guideLinks.count()).toBeGreaterThanOrEqual(3);
+    await expect(
+      page.getByRole("link", { name: "See How We Get Started" }).first(),
+    ).toBeVisible();
     const accessibility = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
       .analyze();
@@ -77,7 +81,9 @@ test("metadata, assets and published revision", async ({ page, request }) => {
   }
   for (const asset of [
     "styles.css",
+    "getting-started.css",
     "site.js",
+    "getting-started.js",
     "favicon.svg",
     "robots.txt",
     "sitemap.xml",
@@ -89,7 +95,26 @@ test("metadata, assets and published revision", async ({ page, request }) => {
   expect(version.commit).toMatch(/^[a-f0-9]{40}$/);
   if (process.env.EXPECTED_COMMIT)
     expect(version.commit).toBe(process.env.EXPECTED_COMMIT);
-  expect((await request.get("./getting-started")).status()).toBe(404);
+  expect((await request.get("./getting-started")).status()).toBe(200);
+  expect((await request.get("./getting-started/")).status()).toBe(200);
+});
+test("the ownership promise opens the getting-started guide", async ({ page }) => {
+  await page.goto("./");
+  await expect(
+    page.getByRole("heading", { name: "The Handoff Happens Before We Begin." }),
+  ).toBeVisible();
+  const guideLink = page
+    .getByRole("link", { name: "See How We Get Started" })
+    .first();
+  await expect(guideLink).toHaveAttribute("href", "/getting-started");
+  await guideLink.click();
+  await expect(page).toHaveURL(/\/getting-started$/);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "Your business.",
+  );
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "Your accounts.",
+  );
 });
 test("navigation works without JavaScript", async ({ browser }) => {
   const context = await browser.newContext({

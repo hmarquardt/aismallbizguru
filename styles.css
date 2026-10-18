@@ -560,25 +560,11 @@ nav a:hover,
     flex-wrap: wrap;
   }
 }
-@media (max-width: 700px) {
-  html {
-    scroll-padding-top: 94px;
-  }
-  .wrap {
-    width: calc(100% - 40px);
-  }
+@media (max-width: 900px) {
   .header-inner {
-    min-height: 80px;
+    min-height: 88px;
     flex-wrap: wrap;
     gap: 0;
-  }
-  .brand {
-    font-size: 13px;
-  }
-  .brand-mark {
-    width: 42px;
-    height: 42px;
-    font-size: 35px;
   }
   .menu-toggle:not([hidden]) {
     display: inline-flex;
@@ -606,6 +592,25 @@ nav a:hover,
   }
   .nav-contact {
     border-bottom: 0;
+  }
+}
+@media (max-width: 700px) {
+  html {
+    scroll-padding-top: 94px;
+  }
+  .wrap {
+    width: calc(100% - 40px);
+  }
+  .header-inner {
+    min-height: 80px;
+  }
+  .brand {
+    font-size: 13px;
+  }
+  .brand-mark {
+    width: 42px;
+    height: 42px;
+    font-size: 35px;
   }
   .hero {
     grid-template-columns: 1fr;
