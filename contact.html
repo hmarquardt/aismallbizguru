@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Start a project | AI Small Business Guru</title>
+    <meta
+      name="description"
+      content="Tell AI Small Business Guru what you're trying to accomplish. No technical specification needed—describe the problem, repetitive work, or idea you have in mind."
+   >
+    <link rel="canonical" href="https://aismallbizguru.com/contact">
+    <meta property="og:title" content="Start a project | AI Small Business Guru">
+    <meta
+      property="og:description"
+      content="Tell us what you're trying to accomplish. No technical brief required."
+   >
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aismallbizguru.com/contact">
+    <meta property="og:locale" content="en_US">
+    <meta name="theme-color" content="#173f35">
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./contact.css">
+    <script src="./site.js" defer></script>
+    <script src="./contact.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="/" aria-label="AI Small Business Guru home"
+          ><span class="brand-mark" aria-hidden="true">g<span>.</span></span
+          ><span>AI Small<br><strong>Business Guru</strong></span></a
+        >
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="navigation"
+          hidden
+        >
+          Menu <span aria-hidden="true">+</span>
+        </button>
+        <nav id="navigation" aria-label="Main navigation">
+          <a href="/#services">What we do</a
+          ><a href="/#ownership">Your ownership</a
+          ><a href="/getting-started">Getting started</a
+          ><a href="/#how">How we work</a
+          ><a class="nav-contact" href="/contact" aria-current="page"
+            >Let’s talk <span aria-hidden="true">↗</span></a
+          >
+        </nav>
+      </div>
+    </header>
+    <main id="main" class="contact-page wrap">
+      <section aria-labelledby="contact-title">
+        <p class="eyebrow">Start a conversation</p>
+        <h1 id="contact-title">Tell us what you're trying to accomplish.</h1>
+        <p class="lead contact-intro">
+          You don't need a technical specification. Describe the problem, the
+          repetitive work, or the idea you have in mind. We'll help figure out
+          what makes sense.
+        </p>
+      </section>
+      <div class="contact-layout">
+        <form id="contact-form" class="inquiry-form" novalidate>
+          <div
+            id="form-status"
+            class="form-status"
+            role="alert"
+            tabindex="-1"
+            hidden
+          ></div>
+          <div class="field">
+            <label for="name">Your name</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              maxlength="100"
+              autocomplete="name"
+              required
+              aria-describedby="name-error"
+            >
+            <p class="field-error" id="name-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="email">Email address</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              maxlength="254"
+              autocomplete="email"
+              required
+              aria-describedby="email-error"
+            >
+            <p class="field-error" id="email-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="business">Business name <span>(optional)</span></label>
+            <input
+              id="business"
+              name="business"
+              type="text"
+              maxlength="120"
+              autocomplete="organization"
+              aria-describedby="business-error"
+            >
+            <p class="field-error" id="business-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="category">What can we help with?</label>
+            <select
+              id="category"
+              name="category"
+              required
+              aria-describedby="category-error"
+            >
+              <option value="">Choose an area</option>
+              <option value="website">Website or online presence</option>
+              <option value="software">Custom business software</option>
+              <option value="automation">Automation and integrations</option>
+              <option value="ai">Artificial intelligence</option>
+              <option value="unsure">Something else / not sure</option>
+            </select>
+            <p class="field-error" id="category-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="description">Tell us about your project</label>
+            <textarea
+              id="description"
+              name="description"
+              rows="9"
+              minlength="20"
+              maxlength="5000"
+              required
+              aria-describedby="description-error description-hint"
+            ></textarea>
+            <p class="field-hint" id="description-hint">
+              What is getting in the way? What would you like to change?
+            </p>
+            <p class="field-error" id="description-error" hidden></p>
+          </div>
+          <div class="honeypot" aria-hidden="true">
+            <label for="website">Website</label>
+            <input
+              id="website"
+              name="website"
+              type="text"
+              tabindex="-1"
+              autocomplete="off"
+            >
+          </div>
+          <div class="field">
+            <div
+              class="cf-turnstile"
+              data-sitekey="0x4AAAAAAFb6gRRQwD6fMIHN"
+              data-action="contact"
+              data-theme="light"
+            ></div>
+            <p class="field-error" id="verification-error" hidden></p>
+          </div>
+          <p class="privacy">
+            Your name, email, optional business name, and project description
+            are used only to evaluate and respond to this inquiry. They are
+            transmitted through Cloudflare's email service to our inbox. This
+            form does not create an account. Please don't submit passwords,
+            payment details, or sensitive confidential information. This page
+            has no analytics or advertising trackers.
+          </p>
+
+          <button class="button primary submit-button" type="submit">
+            Send inquiry <span aria-hidden="true">→</span>
+          </button>
+          <p class="fallback">
+            Prefer email? Write to
+            <a href="mailto:contact@aismallbizguru.com"
+              >contact@aismallbizguru.com</a
+            >.
+          </p>
+          <noscript>
+            <p class="form-status">
+              This form needs JavaScript to send. You can email us directly at
+              <a href="mailto:contact@aismallbizguru.com"
+                >contact@aismallbizguru.com</a
+              >.
+            </p>
+          </noscript>
+        </form>
+        <section
+          id="contact-success"
+          class="contact-success"
+          aria-labelledby="success-title"
+          hidden
+        >
+          <p class="eyebrow">Message received</p>
+          <h2 id="success-title">Thanks! Your message has been received.</h2>
+          <p>
+            We'll review your inquiry and get back to you using the email
+            address you provided.
+          </p>
+          <p class="fallback">
+            You can also email
+            <a href="mailto:contact@aismallbizguru.com"
+              >contact@aismallbizguru.com</a
+            >.
+          </p>
+        </section>
+        <aside class="contact-aside" aria-labelledby="aside-title">
+          <h2 id="aside-title">A simple first step</h2>
+          <p>
+            No account, no questionnaire, and no commitment. This is a
+            conversation about what would make your work easier.
+          </p>
+          <p>
+            Prefer to write directly? Email
+            <a href="mailto:contact@aismallbizguru.com"
+              >contact@aismallbizguru.com</a
+            >
+            or
+            <a href="mailto:hank@aismallbizguru.com"
+              >hank@aismallbizguru.com</a
+            >.
+          </p>
+        </aside>
+      </div>
+    </main>
+    <footer class="wrap footer">
+      <a class="footer-brand" href="/">AI Small Business Guru</a>
+      <p>Practical technology. Ownership from the start.</p>
+      <!-- AISBG_DEPLOY_FOOTER version="2026.10.19.1" bump="Update this version whenever this file changes in a commit." --><small
+        >Version 2026.10.19.1</small
+      >
+    </footer>
+  </body>
+</html>
+

@@ -6,6 +6,7 @@ automation, and AI, with client ownership from the start.
 ## Files and local preview
 
 - `index.html`, `styles.css`, `site.js`: content, responsive design, mobile navigation.
+- `contact.html`, `contact.css`, `contact.js`: project inquiry form and its client-side states.
 - `favicon.svg`, `robots.txt`, `sitemap.xml`, `404.html`: public supporting assets.
 - `scripts/build.mjs`: copies only approved public files to `dist/`, adding a
   `version.json` containing the source commit SHA. Documentation, archived designs,
@@ -164,13 +165,63 @@ Gmail, and the Cloudflare activity log recorded `status: delivered`,
 `action: forward`, with SPF and DKIM passing. Do not treat the existence of
 rules as proof of delivery.
 
+## Contact form
+
+`/contact` is a static page that submits JSON to `POST /api/contact` on the
+existing Worker. There is no account, database, CRM, or stored copy of an
+inquiry. The browser shows success only after the `SEND_EMAIL` binding resolves;
+provider rejection or timeout returns 502 and the page says the message was not
+sent.
+
+Validation limits: name 1–100 characters; email at most 254 characters and
+syntactically valid; category one of `website`, `software`, `automation`, `ai`,
+`unsure`; optional business name at most 120; description 20–5,000; bodies over
+16 KB are rejected. A hidden honeypot is checked, and the visitor's email is
+used only as `Reply-To`.
+
+Delivery uses Cloudflare's `send_email` binding:
+
+- Sender: `contact@aismallbizguru.com` (fixed)
+- Destination: `hmarquardt+aismallbizguru@gmail.com` (fixed)
+- Binding restricts both sender and destination; visitor input cannot influence
+  either. Because the destination is a verified address, no Email Sending domain
+  onboarding or DNS change is required.
+
+Spam controls:
+
+- Cloudflare Turnstile widget on the page; the token is verified server-side at
+  `https://challenges.cloudflare.com/turnstile/v0/siteverify`. Tokens are
+  single-use, so replays fail.
+- Worker secret `TURNSTILE_SECRET` holds the widget secret. The public site key
+  is in `contact.html`; neither is committed as a secret value.
+- `CONTACT_RATE_LIMIT` allows 5 submissions per 60 seconds per
+  `CF-Connecting-IP` in each Cloudflare location. This is Cloudflare's
+  eventually-consistent rate-limit binding, not in-memory Worker state.
+- Wrong methods, origins, content types, malformed JSON, oversized bodies, and
+  missing bindings fail closed.
+
+Operational notes:
+
+- Rotate Turnstile by creating a new widget secret (dashboard or API), updating
+  the site key in `contact.html`, and running
+  `npx wrangler secret put TURNSTILE_SECRET`. No other application credential is
+  required; the GitHub Actions deploy token is unchanged.
+- Diagnose failures with `npx wrangler tail` for `contact_accepted` /
+  `contact_send_failed` (request ID and provider code only, never inquiry
+  content), Cloudflare Email Sending metrics/activity, and Turnstile analytics.
+- Provider acceptance means Cloudflare accepted the message for delivery. It is
+  not proof that Gmail placed it in the inbox; verify receipt separately.
+- Tests use mocked Turnstile and `SEND_EMAIL` in `npm run check`, and stub the
+  API in `npm test`; they never send production mail.
+
 ## Contact and next phase
 
 The established contact is `hank@aismallbizguru.com`, retained from the previous
-homepage and README. Contact links open the visitor's mail application. There is
-no form and no hosted mailbox; `hank@` and `contact@` forward to Gmail as
-described in [Email routing](#email-routing). Update both the visible address
-and mailto link if the owner changes it.
+homepage and README. Prospective clients can use the `/contact` form or email
+`hank@` / `contact@` directly. There is no hosted mailbox; both addresses forward
+to Gmail as described in [Email routing](#email-routing). The form does not
+create an account. Update both the visible address and mailto links if the owner
+changes it.
 
 `/getting-started` is reserved, has no live link, and currently returns 404. The
 homepage marks the guide as forthcoming. Add `getting-started/index.html` and

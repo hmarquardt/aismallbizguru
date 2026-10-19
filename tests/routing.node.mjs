@@ -6,6 +6,7 @@ test("www redirects every path to HTTPS apex without losing encoded or repeated 
   for (const path of [
     "/",
     "/getting-started?from=www",
+    "/contact?from=www",
     "/a%20b?q=a%2Fb&q=&flag",
   ]) {
     const response = await worker.fetch(new Request(`https://www.aismallbizguru.com${path}`), {

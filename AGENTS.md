@@ -76,7 +76,8 @@ Default to surfacing uncertainty, limitations, and skipped work.
 ## Homepage maintenance
 
 - Keep `main` as the production source and `.github/workflows/production.yml` as the only deployment path. Run `npm run check`, `npm run build`, and `npm test` before publishing.
-- Cloudflare Worker `aismallbizguru-site` is the sole host; never restore GitHub Pages publishing. Keep the Worker limited to canonical redirects and the ASSETS binding.
+- Cloudflare Worker `aismallbizguru-site` is the sole host; never restore GitHub Pages publishing. Keep the Worker scoped to canonical redirects, `POST /api/contact`, and its documented bindings (`ASSETS`, `SEND_EMAIL`, `CONTACT_RATE_LIMIT`); do not add unrelated routes or resources.
+- Contact inquiries must keep the recipient and sender fixed in code and the `SEND_EMAIL` binding, verify Turnstile server-side, and never let visitor input choose delivery addresses.
 - Publish only the explicit asset list in `scripts/build.mjs`; keep credentials, reference designs, and development files out of `dist/`.
 - Increment the `AISBG_DEPLOY_FOOTER` date/version whenever committing an `index.html` change.
 - Reserve `/getting-started` until implemented; never publish a placeholder link as a working guide.

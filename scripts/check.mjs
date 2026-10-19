@@ -4,6 +4,9 @@ import { readFileSync, readdirSync, statSync } from "node:fs";
 const html = readFileSync("index.html", "utf8");
 const guide = readFileSync("getting-started.html", "utf8");
 const guideJs = readFileSync("getting-started.js", "utf8");
+const contact = readFileSync("contact.html", "utf8");
+const contactJs = readFileSync("contact.js", "utf8");
+const worker = readFileSync("site-worker.mjs", "utf8");
 const build = readFileSync("scripts/build.mjs", "utf8");
 
 assert.equal((html.match(/<h1\b/g) || []).length, 1);
@@ -18,6 +21,7 @@ assert(
 const sitemap = readFileSync("sitemap.xml", "utf8");
 assert(sitemap.includes("https://aismallbizguru.com/"));
 assert(sitemap.includes("https://aismallbizguru.com/getting-started"));
+assert(sitemap.includes("https://aismallbizguru.com/contact"));
 assert(readFileSync("404.html", "utf8").includes('href="/getting-started"'));
 
 // The guide is a standalone, server-rendered page with one clear heading.
@@ -108,17 +112,51 @@ for (const file of [
   '"getting-started.html"',
   '"getting-started.css"',
   '"getting-started.js"',
+  '"contact.html"',
+  '"contact.css"',
+  '"contact.js"',
 ]) {
   assert(build.includes(file), `Build is missing ${file}`);
 }
 
-// The site keeps one deploy version across its two HTML pages.
+// The site keeps one deploy version across all public HTML pages.
 const versionPattern = /AISBG_DEPLOY_FOOTER version="(\d{4}\.\d{2}\.\d{2}\.\d+)"/;
 const homeVersion = html.match(versionPattern);
 const guideVersion = guide.match(versionPattern);
+const contactVersion = contact.match(versionPattern);
 assert(homeVersion, "Homepage deploy version is missing");
 assert(guideVersion, "Guide deploy version is missing");
+assert(contactVersion, "Contact deploy version is missing");
 assert.equal(homeVersion[1], guideVersion[1], "Deploy versions must match");
+assert.equal(homeVersion[1], contactVersion[1], "Deploy versions must match");
+
+// Contact page: one clear heading, a real form, privacy, and direct email.
+assert.equal((contact.match(/<h1\b/g) || []).length, 1);
+assert(contact.includes('<link rel="canonical" href="https://aismallbizguru.com/contact">'));
+assert(contact.includes('id="contact-form"'));
+for (const id of ["name", "email", "category", "description"]) {
+  assert(contact.includes(`for="${id}"`), `Contact form is missing a label for ${id}`);
+  assert(contact.includes(`id="${id}"`), `Contact form is missing ${id}`);
+}
+assert(contact.includes('name="website"'), "Contact form is missing its honeypot");
+assert(contact.includes("cf-turnstile"));
+assert(contact.includes("form does not create an account"));
+assert(contact.includes("no analytics or advertising trackers"));
+assert(contact.includes("mailto:contact@aismallbizguru.com"));
+assert(contact.includes("contact@aismallbizguru.com"));
+assert(!/type="(?:password|tel|number)"/i.test(contact), "Contact form must not collect credentials, phone, or payment data");
+assert(!/localStorage|sessionStorage|sendBeacon|document\.cookie/.test(contactJs), "Contact code must not persist inquiry content");
+assert(!/google-analytics|googletagmanager|facebook\.net|doubleclick/i.test(contact), "Contact page must not include trackers");
+assert(contactJs.includes('fetch("/api/contact"'));
+assert(contactJs.includes("form.hidden = true"));
+assert(contactJs.includes("turnstileToken"));
+assert(worker.includes("/api/contact"));
+assert(worker.includes('"hmarquardt+aismallbizguru@gmail.com"'));
+assert(worker.includes('"contact@aismallbizguru.com"'));
+assert(worker.includes("CONTACT_RATE_LIMIT"));
+assert(worker.includes("TURNSTILE_SECRET"));
+assert(worker.includes("cf-connecting-ip"));
+assert(!/input\.(?:to|from|recipient)/.test(worker), "Delivery recipients must not come from visitor input");
 
 const workflow = readFileSync(".github/workflows/production.yml", "utf8");
 assert(workflow.includes("branches: [main]"));
@@ -136,8 +174,34 @@ assert.equal(config.assets.binding, "ASSETS");
 assert.equal(config.assets.run_worker_first, true);
 assert.equal(config.assets.not_found_handling, "404-page");
 assert.equal(config.workers_dev, true);
-const allowed = new Set(["$schema", "name", "account_id", "main", "compatibility_date", "workers_dev", "preview_urls", "assets", "routes"]);
+const allowed = new Set([
+  "$schema",
+  "name",
+  "account_id",
+  "main",
+  "compatibility_date",
+  "workers_dev",
+  "preview_urls",
+  "assets",
+  "routes",
+  "send_email",
+  "ratelimits",
+]);
 for (const key of Object.keys(config)) assert(allowed.has(key), `Unexpected resource configuration: ${key}`);
+assert.deepEqual(config.send_email, [
+  {
+    name: "SEND_EMAIL",
+    destination_address: "hmarquardt+aismallbizguru@gmail.com",
+    allowed_sender_addresses: ["contact@aismallbizguru.com"],
+  },
+]);
+assert.deepEqual(config.ratelimits, [
+  {
+    name: "CONTACT_RATE_LIMIT",
+    namespace_id: "4301",
+    simple: { limit: 5, period: 60 },
+  },
+]);
 if (config.routes) assert.deepEqual(config.routes, [
   { pattern: "aismallbizguru.com", custom_domain: true },
   { pattern: "www.aismallbizguru.com", custom_domain: true },
@@ -170,5 +234,5 @@ function scan(dir) {
 }
 scan(".");
 console.log(
-  "Homepage, guide structure, local-only progress, provider links, metadata, route publication, deployment gating and secret-pattern checks passed.",
+  "Homepage, guide, contact form, provider links, metadata, route publication, deployment gating and secret-pattern checks passed.",
 );

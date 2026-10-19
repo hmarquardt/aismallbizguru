@@ -35,12 +35,19 @@ for (const width of [320, 390, 768, 1440]) {
     await page
       .getByRole("link", { name: "Let's Talk About Your Project" })
       .click();
-    await expect(page).toHaveURL(/#contact$/);
+    await expect(page).toHaveURL(/\/contact$/);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Tell us what you're trying to accomplish.",
+    );
+    await page.goto("./#contact");
     await expect(
       page.getByRole("heading", { name: "What would make your work easier?" }),
     ).toBeInViewport();
     await expect(
-      page.getByRole("link", { name: "Email Hank about your project" }),
+      page.getByRole("link", { name: "Start a project inquiry" }),
+    ).toHaveAttribute("href", "/contact");
+    await expect(
+      page.getByRole("link", { name: "hank@aismallbizguru.com" }),
     ).toHaveAttribute("href", /^mailto:hank@aismallbizguru.com\?/);
     const links = await page
       .locator('a[href^="#"]')
@@ -82,8 +89,10 @@ test("metadata, assets and published revision", async ({ page, request }) => {
   for (const asset of [
     "styles.css",
     "getting-started.css",
+    "contact.css",
     "site.js",
     "getting-started.js",
+    "contact.js",
     "favicon.svg",
     "robots.txt",
     "sitemap.xml",
@@ -97,6 +106,7 @@ test("metadata, assets and published revision", async ({ page, request }) => {
     expect(version.commit).toBe(process.env.EXPECTED_COMMIT);
   expect((await request.get("./getting-started")).status()).toBe(200);
   expect((await request.get("./getting-started/")).status()).toBe(200);
+  expect((await request.get("./contact")).status()).toBe(200);
 });
 test("the ownership promise opens the getting-started guide", async ({ page }) => {
   await page.goto("./");

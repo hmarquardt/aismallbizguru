@@ -5,10 +5,13 @@ await mkdir("dist", { recursive: true });
 for (const file of [
   "index.html",
   "getting-started.html",
+  "contact.html",
   "styles.css",
   "getting-started.css",
+  "contact.css",
   "site.js",
   "getting-started.js",
+  "contact.js",
   "favicon.svg",
   "robots.txt",
   "sitemap.xml",
