@@ -114,12 +114,63 @@ in CI. Verify `/version.json` against the Cloudflare deployment commit after rel
 Use `SITE_URL=https://aismallbizguru.com EXPECTED_COMMIT=<sha> npm test` for live
 root-hosted browser verification once DNS is repaired.
 
+## Email routing
+
+Inbound mail for `aismallbizguru.com` is handled by Cloudflare Email Routing,
+enabled 2026-10-19. This is forwarding only: it is not a hosted mailbox, and no
+outbound sending or SMTP relay is configured.
+
+| Public address | Forwards to |
+| --- | --- |
+| `hank@aismallbizguru.com` | `hmarquardt+aismallbizguru@gmail.com` |
+| `contact@aismallbizguru.com` | `hmarquardt+aismallbizguru@gmail.com` |
+
+Both rules use exact-match (`literal`, field `to`) matchers and are enabled.
+The destination is verified. Keep the full destination, including the
+`+aismallbizguru` tag; do not substitute the bare Gmail address. Catch-all
+forwarding is disabled and must stay disabled unless separately authorized.
+
+Cloudflare owns these zone records, assigned for this zone on 2026-10-19:
+
+- MX `route1.mx.cloudflare.net` (priority 55), `route2` (20), `route3` (81).
+  Use the values Cloudflare supplies for the zone; do not copy priorities from
+  another zone.
+- TXT `v=spf1 include:_spf.mx.cloudflare.net ~all` — exactly one SPF record.
+- TXT `cf2024-1._domainkey` — Cloudflare DKIM key.
+
+No DMARC record exists; none existed before this migration. Do not add a second
+SPF record or alter unrelated TXT records. The obsolete Namecheap forwarding MX
+records (`eforward*.registrar-servers.com`) and their SPF include were removed;
+do not restore them.
+
+To change forwarding, edit the rules in the Cloudflare dashboard under
+Compute > Email Service > Email Routing, or use the API:
+
+```sh
+GET/POST /client/v4/zones/{zone_tag}/email/routing/rules
+```
+
+A new destination address must be verified by its owner before rules can use it
+(Cloudflare rejects unverified destinations). Rule changes require Zone Email
+Routing Edit; DNS changes require Zone DNS Edit. Those permissions belong to a
+local, narrowly scoped credential — do not add DNS or Email Routing scopes to
+the GitHub Actions Workers deployment token, and do not commit credentials.
+
+Operational limits: mail is delivered into the Gmail account; replies sent from
+Gmail use the Gmail address. Gmail suppresses forwarded copies of messages sent
+from that same Gmail account, so delivery tests must come from an external
+account. On 2026-10-19, external messages to both public addresses arrived in
+Gmail, and the Cloudflare activity log recorded `status: delivered`,
+`action: forward`, with SPF and DKIM passing. Do not treat the existence of
+rules as proof of delivery.
+
 ## Contact and next phase
 
 The established contact is `hank@aismallbizguru.com`, retained from the previous
 homepage and README. Contact links open the visitor's mail application. There is
-no form, and mailbox delivery has not been independently tested. Update both the
-visible address and mailto link if the owner changes it.
+no form and no hosted mailbox; `hank@` and `contact@` forward to Gmail as
+described in [Email routing](#email-routing). Update both the visible address
+and mailto link if the owner changes it.
 
 `/getting-started` is reserved, has no live link, and currently returns 404. The
 homepage marks the guide as forthcoming. Add `getting-started/index.html` and
