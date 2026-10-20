@@ -396,6 +396,9 @@
   .work-hero {
     padding-block: 48px 40px;
   }
+  .work-hero h1 {
+    font-size: clamp(2rem, 8.5vw, 3.4rem);
+  }
   .work-note {
     grid-template-columns: 1fr;
     gap: 10px;

@@ -5,7 +5,7 @@ const projects = [
   {
     slug: "work-index",
     path: "/work",
-    heading: "Two products.",
+    heading: "Real products.",
     canonical: "https://aismallbizguru.com/work",
   },
   {
@@ -17,12 +17,12 @@ const projects = [
   {
     slug: "fruiting-forecast",
     path: "/work/fruiting-forecast",
-    heading: "A forecast that says",
+    heading: "A field planner for",
     canonical: "https://aismallbizguru.com/work/fruiting-forecast",
   },
 ];
 
-for (const width of [390, 1440]) {
+for (const width of [320, 390, 768, 1440]) {
   test(`portfolio pages are usable at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     const errors = [];
@@ -121,3 +121,15 @@ test("case studies link out to the live products", async ({ page }) => {
     page.getByRole("link", { name: /Visit fruitingforecast\.com/ }),
   ).toHaveAttribute("href", "https://fruitingforecast.com/");
 });
+
+for (const project of projects.slice(1)) {
+  test(`${project.slug} leads readers to the existing project inquiry`, async ({ page }) => {
+    await page.goto(`.${project.path}`);
+    await page.getByRole("link", { name: "Start a project inquiry" }).click();
+    await expect(page).toHaveURL(/\/contact$/);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Tell us what you're trying to accomplish.",
+    );
+    await expect(page.locator("#contact-form")).toBeVisible();
+  });
+}
