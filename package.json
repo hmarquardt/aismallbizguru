@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "check": "html-validate index.html 404.html getting-started.html contact.html && node scripts/check.mjs && node --test tests/routing.node.mjs tests/contact.node.mjs",
+    "check": "html-validate index.html 404.html getting-started.html contact.html work.html work/worth-looking-up.html work/fruiting-forecast.html && node scripts/check.mjs && node --test tests/routing.node.mjs tests/contact.node.mjs",
     "test": "playwright test",
     "preview": "python3 -m http.server 8000 --directory dist",
     "deploy": "wrangler deploy --config wrangler.json --no-x-provision",

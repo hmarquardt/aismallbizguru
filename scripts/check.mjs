@@ -6,6 +6,9 @@ const guide = readFileSync("getting-started.html", "utf8");
 const guideJs = readFileSync("getting-started.js", "utf8");
 const contact = readFileSync("contact.html", "utf8");
 const contactJs = readFileSync("contact.js", "utf8");
+const work = readFileSync("work.html", "utf8");
+const wlu = readFileSync("work/worth-looking-up.html", "utf8");
+const ff = readFileSync("work/fruiting-forecast.html", "utf8");
 const worker = readFileSync("site-worker.mjs", "utf8");
 const build = readFileSync("scripts/build.mjs", "utf8");
 
@@ -21,6 +24,9 @@ assert(
 const sitemap = readFileSync("sitemap.xml", "utf8");
 assert(sitemap.includes("https://aismallbizguru.com/"));
 assert(sitemap.includes("https://aismallbizguru.com/getting-started"));
+assert(sitemap.includes("https://aismallbizguru.com/work"));
+assert(sitemap.includes("https://aismallbizguru.com/work/worth-looking-up"));
+assert(sitemap.includes("https://aismallbizguru.com/work/fruiting-forecast"));
 assert(sitemap.includes("https://aismallbizguru.com/contact"));
 assert(readFileSync("404.html", "utf8").includes('href="/getting-started"'));
 
@@ -115,6 +121,15 @@ for (const file of [
   '"contact.html"',
   '"contact.css"',
   '"contact.js"',
+  '"work.html"',
+  '"work.css"',
+  '"work/worth-looking-up.html"',
+  '"work/fruiting-forecast.html"',
+  '"images/work/worth-looking-up-desktop.jpg"',
+  '"images/work/worth-looking-up-mobile.jpg"',
+  '"images/work/fruiting-forecast-desktop.jpg"',
+  '"images/work/fruiting-forecast-results.jpg"',
+  '"images/work/fruiting-forecast-mobile.jpg"',
 ]) {
   assert(build.includes(file), `Build is missing ${file}`);
 }
@@ -124,11 +139,59 @@ const versionPattern = /AISBG_DEPLOY_FOOTER version="(\d{4}\.\d{2}\.\d{2}\.\d+)"
 const homeVersion = html.match(versionPattern);
 const guideVersion = guide.match(versionPattern);
 const contactVersion = contact.match(versionPattern);
+const workVersion = work.match(versionPattern);
+const wluVersion = wlu.match(versionPattern);
+const ffVersion = ff.match(versionPattern);
 assert(homeVersion, "Homepage deploy version is missing");
 assert(guideVersion, "Guide deploy version is missing");
 assert(contactVersion, "Contact deploy version is missing");
+assert(workVersion, "Work index deploy version is missing");
+assert(wluVersion, "Worth Looking Up deploy version is missing");
+assert(ffVersion, "Fruiting Forecast deploy version is missing");
 assert.equal(homeVersion[1], guideVersion[1], "Deploy versions must match");
 assert.equal(homeVersion[1], contactVersion[1], "Deploy versions must match");
+assert.equal(homeVersion[1], workVersion[1], "Deploy versions must match");
+assert.equal(homeVersion[1], wluVersion[1], "Deploy versions must match");
+assert.equal(homeVersion[1], ffVersion[1], "Deploy versions must match");
+
+// The portfolio publishes two live products with self-hosted assets.
+for (const [file, page] of Object.entries({
+  "work.html": work,
+  "work/worth-looking-up.html": wlu,
+  "work/fruiting-forecast.html": ff,
+})) {
+  assert.equal((page.match(/<h1\b/g) || []).length, 1, `${file} must have exactly one h1`);
+  assert(!/<script[^>]+src="https?:/i.test(page), `${file} scripts must be self-hosted`);
+  assert(!/<link[^>]+rel="stylesheet"[^>]+href="https?:/i.test(page), `${file} styles must be self-hosted`);
+  assert(!/<form\b/i.test(page), `${file} must not contain a form`);
+  assert(!/google-analytics|googletagmanager|facebook\.net|doubleclick/i.test(page), `${file} must not include trackers`);
+}
+assert(html.includes('href="/work"'), "Homepage navigation must link to the portfolio");
+assert(work.includes('<link rel="canonical" href="https://aismallbizguru.com/work">'));
+assert(wlu.includes('<link rel="canonical" href="https://aismallbizguru.com/work/worth-looking-up">'));
+assert(
+  /rel="canonical"[\s\S]{0,60}?href="https:\/\/aismallbizguru\.com\/work\/fruiting-forecast"/.test(
+    ff,
+  ),
+  "Fruiting Forecast canonical URL is missing",
+);
+assert(work.includes('href="/work/worth-looking-up"'));
+assert(work.includes('href="/work/fruiting-forecast"'));
+assert(wlu.includes("https://worthlookingup.com/"));
+assert(ff.includes("https://fruitingforecast.com/"));
+for (const image of [
+  "worth-looking-up-desktop.jpg",
+  "worth-looking-up-mobile.jpg",
+  "fruiting-forecast-desktop.jpg",
+  "fruiting-forecast-results.jpg",
+  "fruiting-forecast-mobile.jpg",
+]) {
+  assert(statSync(`images/work/${image}`).size > 0, `Missing portfolio image ${image}`);
+  assert(
+    [work, wlu, ff].some((page) => page.includes(`/images/work/${image}`)),
+    `${image} is not referenced by a portfolio page`,
+  );
+}
 
 // Contact page: one clear heading, a real form, privacy, and direct email.
 assert.equal((contact.match(/<h1\b/g) || []).length, 1);

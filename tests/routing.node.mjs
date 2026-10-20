@@ -38,6 +38,26 @@ test("www and the guide trailing slash normalize in one canonical redirect", asy
   );
 });
 
+test("portfolio routes are served by static assets, not the Worker", async () => {
+  for (const path of [
+    "/work",
+    "/work/worth-looking-up",
+    "/work/fruiting-forecast",
+  ]) {
+    const request = new Request(`https://aismallbizguru.com${path}`);
+    const found = new Response("Work", { status: 200 });
+    const response = await worker.fetch(request, {
+      ASSETS: {
+        fetch(received) {
+          assert.equal(received, request);
+          return found;
+        },
+      },
+    });
+    assert.equal(response, found);
+  }
+});
+
 test("apex and workers.dev serve the guide directly and preserve real 404s", async () => {
   for (const host of ["aismallbizguru.com", "aismallbizguru-site.hmarquardt.workers.dev"]) {
     for (const path of ["/getting-started", "/getting-started?from=home"]) {
