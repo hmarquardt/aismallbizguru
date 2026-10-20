@@ -16,6 +16,7 @@ for (const file of [
   "work.css",
   "site.js",
   "getting-started.js",
+  "analytics.js",
   "contact.js",
   "images/work/worth-looking-up-desktop.jpg",
   "images/work/worth-looking-up-mobile.jpg",

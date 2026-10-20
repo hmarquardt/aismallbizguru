@@ -11,6 +11,7 @@ const wlu = readFileSync("work/worth-looking-up.html", "utf8");
 const ff = readFileSync("work/fruiting-forecast.html", "utf8");
 const worker = readFileSync("site-worker.mjs", "utf8");
 const build = readFileSync("scripts/build.mjs", "utf8");
+const analyticsJs = readFileSync("analytics.js", "utf8");
 
 assert.equal((html.match(/<h1\b/g) || []).length, 1);
 assert(html.includes('href="/getting-started"'));
@@ -118,6 +119,7 @@ for (const file of [
   '"getting-started.html"',
   '"getting-started.css"',
   '"getting-started.js"',
+  '"analytics.js"',
   '"contact.html"',
   '"contact.css"',
   '"contact.js"',
@@ -133,6 +135,46 @@ for (const file of [
 ]) {
   assert(build.includes(file), `Build is missing ${file}`);
 }
+// Analytics: one self-hosted client, one registered CFLab Analytics site, and
+// no personal data in any payload. Page views cover traffic and portfolio
+// interest; only clicks and confirmed conversions need custom events.
+for (const [file, page] of Object.entries({
+  "index.html": html,
+  "getting-started.html": guide,
+  "contact.html": contact,
+  "work.html": work,
+  "work/worth-looking-up.html": wlu,
+  "work/fruiting-forecast.html": ff,
+})) {
+  assert(
+    page.includes('src="/analytics.js"') || page.includes('src="./analytics.js"'),
+    `${file} must load the analytics client`,
+  );
+  assert(!/<script[^>]+src="https?:/i.test(page), `${file} scripts must be self-hosted`);
+}
+assert(analyticsJs.includes('var SITE_ID = "as_4YsDnNOcpAQq4l1ARNY2pl";'));
+assert(analyticsJs.includes('"https://analytics.aismallbizguru.com/collect"'));
+assert(analyticsJs.includes('"pageview"'));
+assert(analyticsJs.includes('"contact_cta_click"'));
+assert(analyticsJs.includes('"live_app_click"'));
+assert(contactJs.includes('"contact_submit"'));
+assert(contactJs.includes("response.ok && result.ok"));
+assert(
+  /track\("contact_submit",\s*\{\s*category: values\.category,?\s*\}\)/.test(contactJs),
+  "Contact conversion must send only the selected category",
+);
+assert(!/getElementById\(|querySelector\(/.test(analyticsJs), "Analytics must not read page or form values");
+assert(!/localStorage|document\.cookie|sendBeacon/.test(analyticsJs), "Analytics must keep its session in sessionStorage only");
+assert(!/google-analytics|googletagmanager|facebook\.net|doubleclick/i.test(analyticsJs));
+for (const [file, page] of Object.entries({
+  "work.html": work,
+  "work/worth-looking-up.html": wlu,
+  "work/fruiting-forecast.html": ff,
+})) {
+  assert(page.includes('data-live-project="'), `${file} must mark its live-product links`);
+}
+
+
 
 // The site keeps one deploy version across all public HTML pages.
 const versionPattern = /AISBG_DEPLOY_FOOTER version="(\d{4}\.\d{2}\.\d{2}\.\d+)"/;
@@ -204,7 +246,9 @@ for (const id of ["name", "email", "category", "description"]) {
 assert(contact.includes('name="website"'), "Contact form is missing its honeypot");
 assert(contact.includes("cf-turnstile"));
 assert(contact.includes("form does not create an account"));
-assert(contact.includes("no analytics or advertising trackers"));
+assert(contact.includes("cookie-free, first-party analytics"));
+assert(contact.includes("Do Not Track and Global Privacy Control"));
+assert(/never\s+receive anything typed into this form/.test(contact));
 assert(contact.includes("mailto:contact@aismallbizguru.com"));
 assert(contact.includes("contact@aismallbizguru.com"));
 assert(!/type="(?:password|tel|number)"/i.test(contact), "Contact form must not collect credentials, phone, or payment data");

@@ -219,7 +219,18 @@ test("metadata, internal links, provider links, and privacy boundaries", async (
   );
 
   const pageOrigin = new URL(page.url()).origin;
-  expect(externalRequests.every((url) => new URL(url).origin === pageOrigin)).toBe(true);
+  // The only permitted cross-origin request is the first-party CFLab Analytics
+  // collector endpoint; no third-party asset or tracker may load.
+  expect(
+    externalRequests.every((url) => {
+      const parsed = new URL(url);
+      return (
+        parsed.origin === pageOrigin ||
+        (parsed.origin === "https://analytics.aismallbizguru.com" &&
+          parsed.pathname === "/collect")
+      );
+    }),
+  ).toBe(true);
   expect(await page.locator("form").count()).toBe(0);
   const inputs = await page.locator("input").evaluateAll((items) =>
     items.map((input) => ({ type: input.type, name: input.name, autocomplete: input.autocomplete })),

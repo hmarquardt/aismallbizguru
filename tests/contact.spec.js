@@ -89,6 +89,10 @@ test("a successful submission shows confirmation without storing inquiry data", 
   page,
 }) => {
   await prepare(page);
+  // Keep this test hermetic; analytics delivery is covered by analytics.spec.js.
+  await page.route("https://analytics.aismallbizguru.com/**", (route) =>
+    route.fulfill({ status: 204, body: "" }),
+  );
   let payload;
   await page.route("**/api/contact", async (route) => {
     payload = route.request().postDataJSON();
@@ -116,9 +120,20 @@ test("a successful submission shows confirmation without storing inquiry data", 
   expect(payload.website).toBeUndefined();
   const stored = await page.evaluate(() => ({
     local: localStorage.length,
-    session: sessionStorage.length,
+    sessionKeys: Object.keys(sessionStorage),
+    session: sessionStorage.getItem("aismallbizguru.analytics.session"),
   }));
-  expect(stored).toEqual({ local: 0, session: 0 });
+  expect(stored.local).toBe(0);
+  // Only the anonymous analytics session may be stored; never inquiry content.
+  expect(stored.sessionKeys).toEqual(["aismallbizguru.analytics.session"]);
+  expect(stored.session).toMatch(/^\{"id":"s_[a-f0-9]{32}","at":\d+\}$/);
+  for (const value of [
+    validInquiry.name,
+    validInquiry.email,
+    validInquiry.business,
+    validInquiry.description,
+  ])
+    expect(stored.session).not.toContain(value);
 });
 
 test("a provider failure is shown honestly with a direct-email fallback", async ({

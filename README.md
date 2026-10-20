@@ -214,6 +214,56 @@ Operational notes:
 - Tests use mocked Turnstile and `SEND_EMAIL` in `npm run check`, and stub the
   API in `npm test`; they never send production mail.
 
+## Analytics
+
+The site reports to the existing CFLab Analytics Worker (`cflab-analytics`,
+`https://analytics.aismallbizguru.com`). It is registered as its own Site in the
+collector's `analytics_sites` table; no separate database, Worker, or dashboard
+exists.
+
+| Field | Value |
+| --- | --- |
+| public tracking ID | `as_4YsDnNOcpAQq4l1ARNY2pl` (public, not a credential) |
+| slug / name | `aismallbizguru` / AI Small Business Guru |
+| domains | `aismallbizguru.com` (primary), `www.aismallbizguru.com` (alias) |
+| privacy | `respect_dnt` and `respect_gpc` on, 90-day raw retention, UTC days |
+
+`analytics.js` is the self-hosted client (the Worker's canonical payload and
+privacy model, so the "scripts must be self-hosted" rule still holds). It stores
+no cookies or persistent identifier: the anonymous session ID lives in
+`sessionStorage` only and rotates after 30 minutes. Only the pathname (never the
+query string) and UTM parameters are read from the URL; the collector reduces the
+referrer to a hostname and derives coarse browser/OS/device and Cloudflare
+country. Failures are silent and cannot block navigation or the contact form.
+
+| Event | Kind | Properties | Source |
+| --- | --- | --- | --- |
+| `pageview` | pageview | — | automatic, once per page load |
+| `contact_cta_click` | event | `method` (`form`, `email`), `placement` | delegated link listener |
+| `live_app_click` | event | `project`, `placement` (`case-study`, `portfolio`) | `data-live-project` links |
+| `contact_submit` | event | `category` | `contact.js`, only after `{ok:true}` from `/api/contact` |
+
+Page views cover overall traffic and all popular pages, including the portfolio
+index and both case studies; no redundant custom event repeats them. Contact
+submissions are counted only on the endpoint's confirmed success, once per
+inquiry; failed, blocked, rate-limited, and Turnstile-rejected submissions never
+produce the event. No names, email addresses, message content, credentials, or
+precise location are sent.
+
+Verify production telemetry (reads the same table the dashboard reads):
+
+```sh
+cd ~/aismallbizguru-cflab
+npx wrangler d1 execute cflab-analytics --remote --config wrangler.analytics.jsonc \
+  --command "SELECT event_kind, event_name, pathname, referrer_host, utm_source, device, country_code, site_day FROM analytics_events WHERE site_id = (SELECT id FROM analytics_sites WHERE public_id='as_4YsDnNOcpAQq4l1ARNY2pl') ORDER BY id DESC LIMIT 20"
+```
+
+In the dashboard at `https://analytics.aismallbizguru.com/`, choose **AI Small
+Business Guru** in the site selector. Overview/Pages/Acquisition/Events then show
+traffic, popular pages, referrers and UTM sources, and the custom events above.
+The collector drops bot/headless user agents silently, so probe with an ordinary
+browser user agent; a request from an unregistered origin returns `403`.
+
 ## Contact and next phase
 
 The established contact is `hank@aismallbizguru.com`, retained from the previous

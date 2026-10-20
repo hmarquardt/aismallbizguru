@@ -8,6 +8,7 @@ const fields = ["name", "email", "business", "category", "description"];
 let widgetId = null;
 let turnstileToken = "";
 let submitting = false;
+let submissionTracked = false;
 
 function field(name) {
   return form.elements.namedItem(name);
@@ -166,6 +167,16 @@ form.addEventListener("submit", async (event) => {
     const result = await response.json().catch(() => ({}));
 
     if (response.ok && result.ok) {
+      // Only the endpoint's confirmed success counts as a conversion. The guard
+      // prevents a duplicate if this handler is re-entered for the same inquiry;
+      // failures and blocked submissions never reach this branch.
+      if (!submissionTracked) {
+        submissionTracked = true;
+        if (window.aismallbizguruAnalytics)
+          window.aismallbizguruAnalytics.track("contact_submit", {
+            category: values.category,
+          });
+      }
       form.hidden = true;
       success.hidden = false;
       success.setAttribute("tabindex", "-1");
