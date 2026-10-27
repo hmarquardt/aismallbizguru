@@ -22,6 +22,12 @@ assert(
     "https://aismallbizguru.com/sitemap.xml",
   ),
 );
+const structuredDataMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+assert(structuredDataMatch, "Homepage must contain organization JSON-LD");
+const structuredData = JSON.parse(structuredDataMatch[1]);
+assert.equal(structuredData["@type"], "Organization");
+assert.equal(structuredData.url, "https://aismallbizguru.com/");
+assert.equal(structuredData.email, "hank@aismallbizguru.com");
 const sitemap = readFileSync("sitemap.xml", "utf8");
 assert(sitemap.includes("https://aismallbizguru.com/"));
 assert(sitemap.includes("https://aismallbizguru.com/getting-started"));
